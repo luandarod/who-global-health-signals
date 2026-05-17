@@ -4,12 +4,6 @@ Run from the repository root:
 
     python scripts/01_validate_who_api.py
 
-The script checks:
-1. Whether the WHO GHO API is reachable.
-2. Whether the indicator catalog can be read.
-3. Whether the target life expectancy indicator returns data.
-4. Which columns are returned for the first sample.
-
 Generated files are saved under data/raw/ and ignored by Git.
 """
 
@@ -50,9 +44,11 @@ def main() -> None:
     save_preview(dimensions.head(100), "who_dimensions_preview.csv")
 
     print(f"\n3) Reading target indicator: {TARGET_INDICATOR}...")
-    raw_target = client.indicator_data(TARGET_INDICATOR, top=2500)
+    raw_target_full = client.indicator_data(TARGET_INDICATOR)
+    raw_target = raw_target_full.head(2500).copy()
     target = normalize_indicator_frame(raw_target)
-    print(f"Target sample loaded: {len(target):,} rows")
+    print(f"Target full load: {len(raw_target_full):,} rows")
+    print(f"Target sample used: {len(target):,} rows")
     print("Columns:")
     for column in target.columns:
         print(f"- {column}")

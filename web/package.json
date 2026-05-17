@@ -1,0 +1,1 @@
+{"name":"global-health-signals-report","version":"0.1.0","private":true,"type":"module","scripts":{"dev":"astro dev","build":"astro build","preview":"astro preview"},"dependencies":{"@astrojs/svelte":"latest","astro":"latest","d3":"latest","svelte":"latest"},"devDependencies":{}}

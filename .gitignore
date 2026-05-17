@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Data outputs
+# Keep folders, ignore generated data by default.
+data/raw/*
+data/interim/*
+data/processed/*
+data/public/*
+outputs/figures/*
+outputs/tables/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!data/public/.gitkeep
+!outputs/figures/.gitkeep
+!outputs/tables/.gitkeep
+
+# Reports
+reports/*.html
+reports/*.pdf
+reports/*_files/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node / web layer, for later
+node_modules/
+dist/
+.astro/
+.vercel/

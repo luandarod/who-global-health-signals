@@ -4,8 +4,8 @@ Run from the repository root:
 
     python scripts/03_discover_indicator_candidates.py
 
-The script searches the WHO indicator catalog by thematic keywords and exports
-a ranked candidate table to data/interim/who_indicator_candidates.csv.
+The script searches the WHO indicator catalog by thematic keyword rules and
+exports a cleaner candidate table to data/interim/who_indicator_candidates.csv.
 """
 
 from __future__ import annotations
@@ -24,60 +24,69 @@ from src.data.who_client import WHOGHOClient  # noqa: E402
 INTERIM_DIR = PROJECT_ROOT / "data" / "interim"
 INTERIM_DIR.mkdir(parents=True, exist_ok=True)
 
-THEME_KEYWORDS: dict[str, list[str]] = {
+THEME_PATTERNS: dict[str, list[str]] = {
     "outcome_life_expectancy": [
-        "life expectancy",
-        "healthy life expectancy",
+        r"\blife expectancy\b",
+        r"\bhealthy life expectancy\b",
     ],
     "maternal_child_mortality": [
-        "maternal mortality",
-        "neonatal mortality",
-        "infant mortality",
-        "under-five mortality",
-        "under 5 mortality",
-        "child mortality",
+        r"\bmaternal mortality\b",
+        r"\bneonatal mortality\b",
+        r"\binfant mortality\b",
+        r"\bunder five mortality\b",
+        r"\bunder 5 mortality\b",
+        r"\bchild mortality\b",
     ],
     "coverage_and_access": [
-        "universal health coverage",
-        "uhc",
-        "service coverage",
-        "skilled birth",
-        "antenatal care",
-        "essential health services",
+        r"\buniversal health coverage\b",
+        r"\buhc\b",
+        r"\bservice coverage\b",
+        r"\bskilled birth\b",
+        r"\bantenatal care\b",
+        r"\bessential health services\b",
     ],
     "immunization": [
-        "immunization",
-        "immunisation",
-        "vaccination",
-        "vaccine",
-        "measles",
-        "diphtheria",
-        "dtp3",
+        r"\bimmunization\b",
+        r"\bimmunisation\b",
+        r"\bvaccination\b",
+        r"\bvaccine\b",
+        r"\bmeasles\b",
+        r"\bdiphtheria\b",
+        r"\bdtp3\b",
     ],
     "environment_sanitation": [
-        "sanitation",
-        "drinking-water",
-        "drinking water",
-        "wash",
-        "air pollution",
-        "ambient air",
-        "household air",
-        "clean fuels",
+        r"\bsanitation\b",
+        r"\bdrinking water\b",
+        r"\bwash\b",
+        r"\bair pollution\b",
+        r"\bambient air\b",
+        r"\bhousehold air\b",
+        r"\bclean fuels\b",
     ],
     "communicable_diseases": [
-        "tuberculosis",
-        "tb incidence",
-        "hiv",
-        "malaria",
+        r"\btuberculosis\b",
+        r"\btb incidence\b",
+        r"\bhiv\b",
+        r"\bmalaria\b",
     ],
     "health_system_capacity": [
-        "health workforce",
-        "physicians",
-        "nursing",
-        "hospital beds",
-        "health expenditure",
+        r"\bhealth workforce\b",
+        r"\bphysicians\b",
+        r"\bmedical doctors\b",
+        r"\bnursing\b",
+        r"\bhospital beds\b",
+        r"\bhealth expenditure\b",
     ],
 }
+
+EXCLUDE_PATTERNS = [
+    r"\barchived\b",
+    r"\balcohol\b",
+    r"\btobacco\b",
+    r"\bsuicide\b",
+    r"\broads? traffic\b",
+    r"\bviolence\b",
+]
 
 
 def normalize_text(value: object) -> str:
@@ -85,6 +94,10 @@ def normalize_text(value: object) -> str:
     text = text.lower()
     text = re.sub(r"[^a-z0-9]+", " ", text)
     return re.sub(r"\s+", " ", text).strip()
+
+
+def is_excluded(text: str) -> bool:
+    return any(re.search(pattern, text) for pattern in EXCLUDE_PATTERNS)
 
 
 def main() -> None:
@@ -97,21 +110,20 @@ def main() -> None:
     code_column = "IndicatorCode" if "IndicatorCode" in indicators.columns else indicators.columns[0]
     name_column = "IndicatorName" if "IndicatorName" in indicators.columns else indicators.columns[-1]
 
-    # The WHO catalog commonly returns IndicatorCode, IndicatorName and Language.
-    # The fallback above keeps the script usable if the API changes column labels.
-    indicators["_search_text"] = indicators.apply(
-        lambda row: normalize_text(" ".join(str(row.get(col, "")) for col in indicators.columns)),
-        axis=1,
-    )
+    indicators["_indicator_name_norm"] = indicators[name_column].map(normalize_text)
+    indicators["_indicator_code_norm"] = indicators[code_column].map(normalize_text)
+
+    # Search only the human-readable indicator name. Searching the code creates
+    # false positives, for example HIV inside ARCHIVED code suffixes.
+    searchable = indicators.loc[~indicators["_indicator_name_norm"].map(is_excluded)].copy()
 
     rows: list[dict[str, object]] = []
     seen: set[tuple[str, str]] = set()
 
-    for theme, keywords in THEME_KEYWORDS.items():
-        for keyword in keywords:
-            normalized_keyword = normalize_text(keyword)
-            mask = indicators["_search_text"].str.contains(re.escape(normalized_keyword), na=False)
-            matches = indicators.loc[mask].copy()
+    for theme, patterns in THEME_PATTERNS.items():
+        for pattern in patterns:
+            mask = searchable["_indicator_name_norm"].str.contains(pattern, regex=True, na=False)
+            matches = searchable.loc[mask].copy()
             for _, row in matches.iterrows():
                 code = str(row.get(code_column, ""))
                 name = str(row.get(name_column, ""))
@@ -122,7 +134,7 @@ def main() -> None:
                 rows.append(
                     {
                         "theme": theme,
-                        "matched_keyword": keyword,
+                        "matched_pattern": pattern,
                         "indicator_code": code,
                         "indicator_name": name,
                     }
@@ -130,7 +142,7 @@ def main() -> None:
 
     candidates = pd.DataFrame(rows)
     if candidates.empty:
-        raise SystemExit("No indicator candidates found. Inspect catalog column names and keyword list.")
+        raise SystemExit("No indicator candidates found. Inspect catalog column names and pattern list.")
 
     candidates = candidates.sort_values(["theme", "indicator_name", "indicator_code"]).reset_index(drop=True)
     output_path = INTERIM_DIR / "who_indicator_candidates.csv"
@@ -141,7 +153,7 @@ def main() -> None:
     print("\nCandidate count by theme:")
     print(candidates["theme"].value_counts().sort_index())
     print("\nPreview:")
-    print(candidates.head(30).to_string(index=False))
+    print(candidates.head(50).to_string(index=False))
 
 
 if __name__ == "__main__":

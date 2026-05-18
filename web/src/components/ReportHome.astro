@@ -63,7 +63,7 @@ const regionColorMap = {
     <style>
       :root { --bg:#07111a; --ink:#f4efe3; --soft:#d7cfbf; --muted:#9fa9ad; --line:rgba(244,239,227,.12); --lime:#d9ff79; --panel:rgba(255,255,255,.03); }
       * { box-sizing: border-box; }
-      html { background: var(--bg); scroll-behavior: smooth; }
+      html { background: var(--bg); scroll-behavior: smooth; scroll-padding-top: 118px; }
       body { margin: 0; color: var(--ink); font-family: 'Space Grotesk', system-ui, sans-serif; background:
         radial-gradient(circle at 10% 20%, rgba(144,215,255,.14), transparent 30%),
         radial-gradient(circle at 85% 18%, rgba(217,255,121,.12), transparent 24%),
@@ -91,7 +91,7 @@ const regionColorMap = {
       .note-card p { margin: 0; color: var(--soft); line-height: 1.52; font-size: 15px; }
       .chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:18px; }
       .chip { padding:8px 10px; border:1px solid var(--line); border-radius:999px; background: rgba(255,255,255,.02); color: var(--muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
-      .section { padding: 92px 0; border-top: 1px solid var(--line); scroll-margin-top: 84px; }
+      .section { padding: 92px 0; border-top: 1px solid var(--line); scroll-margin-top: 118px; }
       .section-head { display:grid; grid-template-columns: 240px 1fr; gap: 34px; margin-bottom: 30px; }
       .section-label { color: var(--lime); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding-top: 8px; }
       .section-label:after { content:''; display:block; width:100%; height:1px; margin-top:18px; background: var(--line); }

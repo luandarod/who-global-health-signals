@@ -7,8 +7,11 @@
 
   let selectedIndex = 0;
   let pointer = null;
+  let showAll = false;
 
   $: rows = models ?? [];
+  $: collapsedCount = Math.min(rows.length, 6);
+  $: visibleRows = showAll ? rows : rows.slice(0, collapsedCount);
   $: maxMae = Math.max(...rows.map((row) => Number(row.test_mae) || 0), 0.01);
   $: selected = rows[selectedIndex] ?? rows[0];
   $: localRows = rows.filter((row) => row.dependency !== 'priorlabs_api');
@@ -17,6 +20,9 @@
     selected && bestLocal
       ? Math.abs((Number(bestLocal.test_mae) || 0) - (Number(rows[0]?.test_mae) || 0))
       : null;
+  $: if (!showAll && selectedIndex >= collapsedCount) {
+    selectedIndex = 0;
+  }
 
   function scoreWidth(row) {
     const mae = Number(row.test_mae) || 0;
@@ -42,11 +48,24 @@
       text: `MAE ${formatNumber(row.test_mae)} | RMSE ${formatNumber(row.test_rmse)} | R2 ${formatNumber(row.test_r2)}`
     };
   }
+
+  function toggleRows() {
+    showAll = !showAll;
+  }
 </script>
 
 <section class="model-layout">
   <div class="rows">
-    {#each rows as row, index}
+    <div class="rows-head">
+      <p>Showing {visibleRows.length} of {rows.length} models by default so the ranking reads faster.</p>
+      {#if rows.length > collapsedCount}
+        <button type="button" class="toggle" on:click={toggleRows}>
+          {showAll ? 'Show executive view' : `Show all ${rows.length} models`}
+        </button>
+      {/if}
+    </div>
+
+    {#each visibleRows as row, index}
       <article
         class:active={index === selectedIndex}
         class:isTop={index === 0}
@@ -122,6 +141,38 @@
   .rows {
     display: grid;
     gap: 12px;
+  }
+
+  .rows-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .rows-head p {
+    margin: 0;
+    color: #9d958b;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .toggle {
+    border: 1px solid rgba(247, 243, 232, 0.14);
+    border-radius: 999px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #f7f3e8;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+
+  .toggle:hover {
+    border-color: rgba(215, 255, 111, 0.42);
+    color: #d7ff6f;
   }
 
   .model-row {
@@ -282,6 +333,10 @@
     .model-layout,
     .model-row {
       grid-template-columns: 1fr;
+    }
+
+    .rows-head {
+      align-items: flex-start;
     }
 
     .score {

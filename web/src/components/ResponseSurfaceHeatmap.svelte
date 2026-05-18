@@ -1,6 +1,6 @@
 <script>
   import ChartFrame from './ChartFrame.svelte';
-  import { formatModelName, formatNumber } from '../lib/presentation.js';
+  import { formatFeatureName, formatModelName, formatNumber } from '../lib/presentation.js';
 
   export let surface = null;
 
@@ -22,7 +22,7 @@
 
 <ChartFrame
   title={`${formatModelName(surface?.model)} response surface`}
-  description={`${surface?.feature_x} against ${surface?.feature_y}`}
+  description={`${formatFeatureName(surface?.feature_x)} against ${formatFeatureName(surface?.feature_y)}`}
   whyItMatters="This heatmap shows how predicted life expectancy changes when two strong signals move together while the remaining profile stays fixed."
 >
   <div class="meta">
@@ -41,8 +41,8 @@
   </div>
 
   <div class="axis">
-    <span>{surface?.feature_x}</span>
-    <span>{surface?.feature_y}</span>
+    <span>{formatFeatureName(surface?.feature_x)}</span>
+    <span>{formatFeatureName(surface?.feature_y)}</span>
   </div>
 </ChartFrame>
 

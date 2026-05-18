@@ -15,6 +15,20 @@ const MODEL_LABELS = {
   knn: 'KNN'
 };
 
+const FEATURE_LABELS = {
+  healthy_life_expectancy_hale_at_birth_years: 'Healthy life expectancy at birth',
+  life_expectancy_at_age_60_years: 'Life expectancy at age 60',
+  current_health_expenditure_percent_of_gdp: 'Current health expenditure (% of GDP)',
+  domestic_general_government_health_expenditure_percent_of_gdp: 'Public health expenditure (% of GDP)',
+  domestic_general_government_health_expenditure_percent_of_current_health_expenditure: 'Public share of health expenditure',
+  population_using_safely_managed_drinking_water_services_percent: 'Safe drinking water access',
+  population_using_safely_managed_sanitation_services_percent: 'Safe sanitation access',
+  immunization_coverage_among_1_year_olds_dtp3_percent: 'DTP3 immunization coverage',
+  under_five_mortality_rate_probability_of_dying_per_1000_live_births: 'Under-five mortality rate',
+  neonatal_mortality_rate_per_1000_live_births: 'Neonatal mortality rate',
+  maternal_mortality_ratio_per_100000_live_births: 'Maternal mortality ratio'
+};
+
 export function formatNumber(value, digits = 2) {
   const number = Number(value);
   if (!Number.isFinite(number)) return FALLBACK;
@@ -53,4 +67,19 @@ export function formatDependency(value) {
   if (value === 'priorlabs_api') return 'External reference';
   if (value === 'local') return 'Local benchmark';
   return labelName(value);
+}
+
+export function formatFeatureName(value) {
+  const key = String(value ?? '').trim();
+  if (!key) return FALLBACK;
+  if (FEATURE_LABELS[key]) return FEATURE_LABELS[key];
+
+  return key
+    .replaceAll('_percent', ' percent')
+    .replaceAll('_per_1000_live_births', ' per 1,000 live births')
+    .replaceAll('_per_100000_live_births', ' per 100,000 live births')
+    .replaceAll('_at_birth_years', ' at birth')
+    .replaceAll('_years', '')
+    .replaceAll('_', ' ')
+    .replace(/\b\w/g, (character) => character.toUpperCase());
 }

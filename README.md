@@ -4,6 +4,12 @@
 
 This repository is an end-to-end analytical project that rebuilds public WHO Global Health Observatory signals into a country-year panel, audits data quality, benchmarks multiple predictive models, analyzes residuals, and publishes the results as an interactive web report.
 
+## Live report
+
+Published site:
+
+- [who-global-health-signals.vercel.app](https://who-global-health-signals.vercel.app)
+
 ## Executive summary
 
 ### Target question
@@ -289,9 +295,11 @@ Current frontend direction:
 - an executive summary at the top
 - a balanced answer to the target question
 - native charts instead of embedded PNG figures
+- a compact benchmark view by default, with full ranking available on demand
 - glossary interactions for technical terms
 - residual sections framed as investigative follow-up
 - a separate model behavior section for response-surface evidence
+- responsive sticky navigation tuned for section anchors across desktop and mobile
 
 ## WHO API and TLS notes
 
@@ -338,6 +346,13 @@ cd "C:\Users\Luanda Rodrigues\who-global-health-signals"
 npm.cmd run dev --prefix .\web
 ```
 
+To build the production site locally:
+
+```powershell
+$env:ASTRO_TELEMETRY_DISABLED='1'
+npm.cmd run build --prefix .\web
+```
+
 To rebuild the web JSON assets after analytical changes:
 
 ```powershell
@@ -364,6 +379,21 @@ The project now answers the following with confidence:
 2. which model families remain competitive under a forward-looking temporal split
 3. which regions, years, and countries remain hardest to explain
 4. how to turn the result into a reproducible analytical report instead of a notebook-only artifact
+
+## Deployment
+
+This repository is configured for Vercel with:
+
+- `npm ci --prefix web` as the install command
+- `npm run build --prefix web` as the build command
+- `web/dist` as the static output directory
+
+The current production shell is the same one described in this README:
+
+- executive summary first
+- native chart evidence throughout the report
+- glossary support for non-technical readers
+- benchmark, residuals, and model-behavior chapters
 
 ## Next high-value extensions
 

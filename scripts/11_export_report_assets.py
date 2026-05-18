@@ -31,6 +31,7 @@ an Astro/Svelte scrollytelling report in the next project phase.
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -62,15 +63,35 @@ def read_csv(path: Path) -> pd.DataFrame:
     return pd.read_csv(path)
 
 
+def sanitize_json_value(value: Any) -> Any:
+    """Convert pandas/numpy missing values into valid JSON nulls.
+
+    Python's json.dump can otherwise write NaN, which is not valid JSON for
+    browser JSON.parse/fetch parsing.
+    """
+    if value is None:
+        return None
+    if pd.isna(value):
+        return None
+    if isinstance(value, float) and (math.isnan(value) or math.isinf(value)):
+        return None
+    if isinstance(value, dict):
+        return {str(key): sanitize_json_value(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [sanitize_json_value(item) for item in value]
+    return value
+
+
 def clean_records(frame: pd.DataFrame) -> list[dict[str, Any]]:
-    cleaned = frame.where(pd.notna(frame), None)
-    return cleaned.to_dict(orient="records")
+    records = frame.to_dict(orient="records")
+    return sanitize_json_value(records)
 
 
 def write_json(name: str, payload: Any) -> None:
     path = PUBLIC_DIR / name
+    clean_payload = sanitize_json_value(payload)
     with path.open("w", encoding="utf-8") as file:
-        json.dump(payload, file, ensure_ascii=False, indent=2)
+        json.dump(clean_payload, file, ensure_ascii=False, indent=2, allow_nan=False)
     print(f"Saved: {path.relative_to(PROJECT_ROOT)}")
 
 

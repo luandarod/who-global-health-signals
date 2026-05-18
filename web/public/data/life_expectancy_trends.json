@@ -1,0 +1,794 @@
+[
+  {
+    "year": 2000,
+    "region": "Africa",
+    "life_expectancy": 54.22852363085106,
+    "countries": 47
+  },
+  {
+    "year": 2000,
+    "region": "Americas",
+    "life_expectancy": 72.54536400575758,
+    "countries": 33
+  },
+  {
+    "year": 2000,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 68.53012484545455,
+    "countries": 22
+  },
+  {
+    "year": 2000,
+    "region": "Europe",
+    "life_expectancy": 73.66592092795919,
+    "countries": 49
+  },
+  {
+    "year": 2000,
+    "region": "South-East Asia",
+    "life_expectancy": 65.702516214,
+    "countries": 10
+  },
+  {
+    "year": 2000,
+    "region": "Western Pacific",
+    "life_expectancy": 69.31266494363636,
+    "countries": 22
+  },
+  {
+    "year": 2001,
+    "region": "Africa",
+    "life_expectancy": 54.6541758674468,
+    "countries": 47
+  },
+  {
+    "year": 2001,
+    "region": "Americas",
+    "life_expectancy": 72.71846580242423,
+    "countries": 33
+  },
+  {
+    "year": 2001,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 68.76675819727274,
+    "countries": 22
+  },
+  {
+    "year": 2001,
+    "region": "Europe",
+    "life_expectancy": 74.0050264889796,
+    "countries": 49
+  },
+  {
+    "year": 2001,
+    "region": "South-East Asia",
+    "life_expectancy": 66.3627722,
+    "countries": 10
+  },
+  {
+    "year": 2001,
+    "region": "Western Pacific",
+    "life_expectancy": 69.60438700045455,
+    "countries": 22
+  },
+  {
+    "year": 2002,
+    "region": "Africa",
+    "life_expectancy": 55.01529235829787,
+    "countries": 47
+  },
+  {
+    "year": 2002,
+    "region": "Americas",
+    "life_expectancy": 73.01698890030302,
+    "countries": 33
+  },
+  {
+    "year": 2002,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 68.92572580863636,
+    "countries": 22
+  },
+  {
+    "year": 2002,
+    "region": "Europe",
+    "life_expectancy": 74.0613697,
+    "countries": 49
+  },
+  {
+    "year": 2002,
+    "region": "South-East Asia",
+    "life_expectancy": 66.785004059,
+    "countries": 10
+  },
+  {
+    "year": 2002,
+    "region": "Western Pacific",
+    "life_expectancy": 69.79310745772727,
+    "countries": 22
+  },
+  {
+    "year": 2003,
+    "region": "Africa",
+    "life_expectancy": 55.39513288148937,
+    "countries": 47
+  },
+  {
+    "year": 2003,
+    "region": "Americas",
+    "life_expectancy": 73.09670735151515,
+    "countries": 33
+  },
+  {
+    "year": 2003,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 69.15133502636364,
+    "countries": 22
+  },
+  {
+    "year": 2003,
+    "region": "Europe",
+    "life_expectancy": 74.23110445081633,
+    "countries": 49
+  },
+  {
+    "year": 2003,
+    "region": "South-East Asia",
+    "life_expectancy": 67.868126141,
+    "countries": 10
+  },
+  {
+    "year": 2003,
+    "region": "Western Pacific",
+    "life_expectancy": 70.058529205,
+    "countries": 22
+  },
+  {
+    "year": 2004,
+    "region": "Africa",
+    "life_expectancy": 55.99043119,
+    "countries": 47
+  },
+  {
+    "year": 2004,
+    "region": "Americas",
+    "life_expectancy": 73.28614447121213,
+    "countries": 33
+  },
+  {
+    "year": 2004,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 69.40037400863636,
+    "countries": 22
+  },
+  {
+    "year": 2004,
+    "region": "Europe",
+    "life_expectancy": 74.63281092122449,
+    "countries": 49
+  },
+  {
+    "year": 2004,
+    "region": "South-East Asia",
+    "life_expectancy": 67.72004979900001,
+    "countries": 10
+  },
+  {
+    "year": 2004,
+    "region": "Western Pacific",
+    "life_expectancy": 70.21828110863636,
+    "countries": 22
+  },
+  {
+    "year": 2005,
+    "region": "Africa",
+    "life_expectancy": 56.6748979612766,
+    "countries": 47
+  },
+  {
+    "year": 2005,
+    "region": "Americas",
+    "life_expectancy": 73.47216315424242,
+    "countries": 33
+  },
+  {
+    "year": 2005,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 69.66802105409091,
+    "countries": 22
+  },
+  {
+    "year": 2005,
+    "region": "Europe",
+    "life_expectancy": 74.69031836959999,
+    "countries": 50
+  },
+  {
+    "year": 2005,
+    "region": "South-East Asia",
+    "life_expectancy": 68.698775278,
+    "countries": 10
+  },
+  {
+    "year": 2005,
+    "region": "Western Pacific",
+    "life_expectancy": 70.54710882772727,
+    "countries": 22
+  },
+  {
+    "year": 2006,
+    "region": "Africa",
+    "life_expectancy": 57.47187527255319,
+    "countries": 47
+  },
+  {
+    "year": 2006,
+    "region": "Americas",
+    "life_expectancy": 73.87321559151516,
+    "countries": 33
+  },
+  {
+    "year": 2006,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 69.83313716863637,
+    "countries": 22
+  },
+  {
+    "year": 2006,
+    "region": "Europe",
+    "life_expectancy": 75.04400757479999,
+    "countries": 50
+  },
+  {
+    "year": 2006,
+    "region": "South-East Asia",
+    "life_expectancy": 69.045508417,
+    "countries": 10
+  },
+  {
+    "year": 2006,
+    "region": "Western Pacific",
+    "life_expectancy": 70.7968943659091,
+    "countries": 22
+  },
+  {
+    "year": 2007,
+    "region": "Africa",
+    "life_expectancy": 58.22937195212766,
+    "countries": 47
+  },
+  {
+    "year": 2007,
+    "region": "Americas",
+    "life_expectancy": 73.92280117909091,
+    "countries": 33
+  },
+  {
+    "year": 2007,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 70.25694876272728,
+    "countries": 22
+  },
+  {
+    "year": 2007,
+    "region": "Europe",
+    "life_expectancy": 75.302135591,
+    "countries": 50
+  },
+  {
+    "year": 2007,
+    "region": "South-East Asia",
+    "life_expectancy": 69.40722507299999,
+    "countries": 10
+  },
+  {
+    "year": 2007,
+    "region": "Western Pacific",
+    "life_expectancy": 71.0073495359091,
+    "countries": 22
+  },
+  {
+    "year": 2008,
+    "region": "Africa",
+    "life_expectancy": 58.972936301702134,
+    "countries": 47
+  },
+  {
+    "year": 2008,
+    "region": "Americas",
+    "life_expectancy": 74.10873105060607,
+    "countries": 33
+  },
+  {
+    "year": 2008,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 70.48269909136364,
+    "countries": 22
+  },
+  {
+    "year": 2008,
+    "region": "Europe",
+    "life_expectancy": 75.63296582459999,
+    "countries": 50
+  },
+  {
+    "year": 2008,
+    "region": "South-East Asia",
+    "life_expectancy": 69.038130588,
+    "countries": 10
+  },
+  {
+    "year": 2008,
+    "region": "Western Pacific",
+    "life_expectancy": 71.19143000590908,
+    "countries": 22
+  },
+  {
+    "year": 2009,
+    "region": "Africa",
+    "life_expectancy": 59.603643257021275,
+    "countries": 47
+  },
+  {
+    "year": 2009,
+    "region": "Americas",
+    "life_expectancy": 74.32115923787879,
+    "countries": 33
+  },
+  {
+    "year": 2009,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 70.83060138818182,
+    "countries": 22
+  },
+  {
+    "year": 2009,
+    "region": "Europe",
+    "life_expectancy": 75.9978446424,
+    "countries": 50
+  },
+  {
+    "year": 2009,
+    "region": "South-East Asia",
+    "life_expectancy": 69.960358498,
+    "countries": 10
+  },
+  {
+    "year": 2009,
+    "region": "Western Pacific",
+    "life_expectancy": 71.24548222909091,
+    "countries": 22
+  },
+  {
+    "year": 2010,
+    "region": "Africa",
+    "life_expectancy": 60.237318028085106,
+    "countries": 47
+  },
+  {
+    "year": 2010,
+    "region": "Americas",
+    "life_expectancy": 73.79315857424241,
+    "countries": 33
+  },
+  {
+    "year": 2010,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 71.227601435,
+    "countries": 22
+  },
+  {
+    "year": 2010,
+    "region": "Europe",
+    "life_expectancy": 76.3051830512,
+    "countries": 50
+  },
+  {
+    "year": 2010,
+    "region": "South-East Asia",
+    "life_expectancy": 70.457285088,
+    "countries": 10
+  },
+  {
+    "year": 2010,
+    "region": "Western Pacific",
+    "life_expectancy": 71.58901310454546,
+    "countries": 22
+  },
+  {
+    "year": 2011,
+    "region": "Africa",
+    "life_expectancy": 60.790272321276596,
+    "countries": 47
+  },
+  {
+    "year": 2011,
+    "region": "Americas",
+    "life_expectancy": 74.6633677730303,
+    "countries": 33
+  },
+  {
+    "year": 2011,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 71.05669450318182,
+    "countries": 22
+  },
+  {
+    "year": 2011,
+    "region": "Europe",
+    "life_expectancy": 76.6677041516,
+    "countries": 50
+  },
+  {
+    "year": 2011,
+    "region": "South-East Asia",
+    "life_expectancy": 70.921338264,
+    "countries": 10
+  },
+  {
+    "year": 2011,
+    "region": "Western Pacific",
+    "life_expectancy": 71.74504528818183,
+    "countries": 22
+  },
+  {
+    "year": 2012,
+    "region": "Africa",
+    "life_expectancy": 61.33247692382978,
+    "countries": 47
+  },
+  {
+    "year": 2012,
+    "region": "Americas",
+    "life_expectancy": 74.8137684839394,
+    "countries": 33
+  },
+  {
+    "year": 2012,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 71.38030089545454,
+    "countries": 22
+  },
+  {
+    "year": 2012,
+    "region": "Europe",
+    "life_expectancy": 76.8771948064,
+    "countries": 50
+  },
+  {
+    "year": 2012,
+    "region": "South-East Asia",
+    "life_expectancy": 71.407623975,
+    "countries": 10
+  },
+  {
+    "year": 2012,
+    "region": "Western Pacific",
+    "life_expectancy": 71.95622875136364,
+    "countries": 22
+  },
+  {
+    "year": 2013,
+    "region": "Africa",
+    "life_expectancy": 61.788136890851064,
+    "countries": 47
+  },
+  {
+    "year": 2013,
+    "region": "Americas",
+    "life_expectancy": 74.87944080242424,
+    "countries": 33
+  },
+  {
+    "year": 2013,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 71.78847237636363,
+    "countries": 22
+  },
+  {
+    "year": 2013,
+    "region": "Europe",
+    "life_expectancy": 77.2330106396,
+    "countries": 50
+  },
+  {
+    "year": 2013,
+    "region": "South-East Asia",
+    "life_expectancy": 71.721134668,
+    "countries": 10
+  },
+  {
+    "year": 2013,
+    "region": "Western Pacific",
+    "life_expectancy": 72.15729271863637,
+    "countries": 22
+  },
+  {
+    "year": 2014,
+    "region": "Africa",
+    "life_expectancy": 62.065499324893615,
+    "countries": 47
+  },
+  {
+    "year": 2014,
+    "region": "Americas",
+    "life_expectancy": 74.90985433878788,
+    "countries": 33
+  },
+  {
+    "year": 2014,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 71.64452936863637,
+    "countries": 22
+  },
+  {
+    "year": 2014,
+    "region": "Europe",
+    "life_expectancy": 77.4427042912,
+    "countries": 50
+  },
+  {
+    "year": 2014,
+    "region": "South-East Asia",
+    "life_expectancy": 72.020496426,
+    "countries": 10
+  },
+  {
+    "year": 2014,
+    "region": "Western Pacific",
+    "life_expectancy": 72.31987017227273,
+    "countries": 22
+  },
+  {
+    "year": 2015,
+    "region": "Africa",
+    "life_expectancy": 62.52175433446809,
+    "countries": 47
+  },
+  {
+    "year": 2015,
+    "region": "Americas",
+    "life_expectancy": 74.94013241060605,
+    "countries": 33
+  },
+  {
+    "year": 2015,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 71.77048720181818,
+    "countries": 22
+  },
+  {
+    "year": 2015,
+    "region": "Europe",
+    "life_expectancy": 77.5083429484,
+    "countries": 50
+  },
+  {
+    "year": 2015,
+    "region": "South-East Asia",
+    "life_expectancy": 72.276135015,
+    "countries": 10
+  },
+  {
+    "year": 2015,
+    "region": "Western Pacific",
+    "life_expectancy": 72.42318132136364,
+    "countries": 22
+  },
+  {
+    "year": 2016,
+    "region": "Africa",
+    "life_expectancy": 62.992377373617025,
+    "countries": 47
+  },
+  {
+    "year": 2016,
+    "region": "Americas",
+    "life_expectancy": 74.95875640575758,
+    "countries": 33
+  },
+  {
+    "year": 2016,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 71.98219877318182,
+    "countries": 22
+  },
+  {
+    "year": 2016,
+    "region": "Europe",
+    "life_expectancy": 77.791169774,
+    "countries": 50
+  },
+  {
+    "year": 2016,
+    "region": "South-East Asia",
+    "life_expectancy": 72.614572143,
+    "countries": 10
+  },
+  {
+    "year": 2016,
+    "region": "Western Pacific",
+    "life_expectancy": 72.59299885318181,
+    "countries": 22
+  },
+  {
+    "year": 2017,
+    "region": "Africa",
+    "life_expectancy": 63.36198370255319,
+    "countries": 47
+  },
+  {
+    "year": 2017,
+    "region": "Americas",
+    "life_expectancy": 75.1289015069697,
+    "countries": 33
+  },
+  {
+    "year": 2017,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 72.20301017772728,
+    "countries": 22
+  },
+  {
+    "year": 2017,
+    "region": "Europe",
+    "life_expectancy": 77.993375243,
+    "countries": 50
+  },
+  {
+    "year": 2017,
+    "region": "South-East Asia",
+    "life_expectancy": 72.825121434,
+    "countries": 10
+  },
+  {
+    "year": 2017,
+    "region": "Western Pacific",
+    "life_expectancy": 72.72686448545454,
+    "countries": 22
+  },
+  {
+    "year": 2018,
+    "region": "Africa",
+    "life_expectancy": 63.70330304723404,
+    "countries": 47
+  },
+  {
+    "year": 2018,
+    "region": "Americas",
+    "life_expectancy": 75.23406208242424,
+    "countries": 33
+  },
+  {
+    "year": 2018,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 72.66348416181819,
+    "countries": 22
+  },
+  {
+    "year": 2018,
+    "region": "Europe",
+    "life_expectancy": 78.1619692308,
+    "countries": 50
+  },
+  {
+    "year": 2018,
+    "region": "South-East Asia",
+    "life_expectancy": 73.092218204,
+    "countries": 10
+  },
+  {
+    "year": 2018,
+    "region": "Western Pacific",
+    "life_expectancy": 72.84819174545454,
+    "countries": 22
+  },
+  {
+    "year": 2019,
+    "region": "Africa",
+    "life_expectancy": 64.03557072893616,
+    "countries": 47
+  },
+  {
+    "year": 2019,
+    "region": "Americas",
+    "life_expectancy": 75.18153763878787,
+    "countries": 33
+  },
+  {
+    "year": 2019,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 73.06721128863636,
+    "countries": 22
+  },
+  {
+    "year": 2019,
+    "region": "Europe",
+    "life_expectancy": 78.39691166200001,
+    "countries": 50
+  },
+  {
+    "year": 2019,
+    "region": "South-East Asia",
+    "life_expectancy": 72.941647655,
+    "countries": 10
+  },
+  {
+    "year": 2019,
+    "region": "Western Pacific",
+    "life_expectancy": 73.03383144409091,
+    "countries": 22
+  },
+  {
+    "year": 2020,
+    "region": "Africa",
+    "life_expectancy": 64.05101734489361,
+    "countries": 47
+  },
+  {
+    "year": 2020,
+    "region": "Americas",
+    "life_expectancy": 74.10867665969697,
+    "countries": 33
+  },
+  {
+    "year": 2020,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 71.95717229090909,
+    "countries": 22
+  },
+  {
+    "year": 2020,
+    "region": "Europe",
+    "life_expectancy": 77.3243804474,
+    "countries": 50
+  },
+  {
+    "year": 2020,
+    "region": "South-East Asia",
+    "life_expectancy": 73.244249245,
+    "countries": 10
+  },
+  {
+    "year": 2020,
+    "region": "Western Pacific",
+    "life_expectancy": 73.28071618909091,
+    "countries": 22
+  },
+  {
+    "year": 2021,
+    "region": "Africa",
+    "life_expectancy": 63.50862922638298,
+    "countries": 47
+  },
+  {
+    "year": 2021,
+    "region": "Americas",
+    "life_expectancy": 72.67134707545455,
+    "countries": 33
+  },
+  {
+    "year": 2021,
+    "region": "Eastern Mediterranean",
+    "life_expectancy": 71.11907504136364,
+    "countries": 22
+  },
+  {
+    "year": 2021,
+    "region": "Europe",
+    "life_expectancy": 76.9270044922,
+    "countries": 50
+  },
+  {
+    "year": 2021,
+    "region": "South-East Asia",
+    "life_expectancy": 72.173752557,
+    "countries": 10
+  },
+  {
+    "year": 2021,
+    "region": "Western Pacific",
+    "life_expectancy": 72.37259877999999,
+    "countries": 22
+  }
+]

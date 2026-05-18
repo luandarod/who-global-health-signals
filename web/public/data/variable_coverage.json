@@ -1,0 +1,142 @@
+[
+  {
+    "variable_name": "under_five_mortality_rate_probability_of_dying_by_age_5_pe",
+    "non_null_rows": 13038,
+    "missing_rows": 800,
+    "non_null_share": 0.9421881774822952,
+    "missing_share": 0.0578118225177048
+  },
+  {
+    "variable_name": "infant_mortality_rate_probability_of_dying_between_birth_a",
+    "non_null_rows": 12967,
+    "missing_rows": 871,
+    "non_null_share": 0.9370573782338488,
+    "missing_share": 0.0629426217661511
+  },
+  {
+    "variable_name": "neonatal_mortality_rate_per_1000_live_births",
+    "non_null_rows": 10209,
+    "missing_rows": 3629,
+    "non_null_share": 0.7377511201040613,
+    "missing_share": 0.2622488798959387
+  },
+  {
+    "variable_name": "diphtheria_number_of_reported_cases",
+    "non_null_rows": 8530,
+    "missing_rows": 5308,
+    "non_null_share": 0.6164185575950282,
+    "missing_share": 0.3835814424049718
+  },
+  {
+    "variable_name": "maternal_mortality_ratio_per_100_000_live_births",
+    "non_null_rows": 7605,
+    "missing_rows": 6233,
+    "non_null_share": 0.549573637808932,
+    "missing_share": 0.450426362191068
+  },
+  {
+    "variable_name": "diphtheria_tetanus_toxoid_and_pertussis_dtp3_immunization",
+    "non_null_rows": 4831,
+    "missing_rows": 9007,
+    "non_null_share": 0.3491111432287903,
+    "missing_share": 0.6508888567712097
+  },
+  {
+    "variable_name": "hib_hib3_immunization_coverage_among_1_year_olds",
+    "non_null_rows": 4831,
+    "missing_rows": 9007,
+    "non_null_share": 0.3491111432287903,
+    "missing_share": 0.6508888567712097
+  },
+  {
+    "variable_name": "hepatitis_b_hepb3_immunization_coverage_among_1_year_olds",
+    "non_null_rows": 4831,
+    "missing_rows": 9007,
+    "non_null_share": 0.3491111432287903,
+    "missing_share": 0.6508888567712097
+  },
+  {
+    "variable_name": "current_health_expenditure_che_as_percentage_of_gross_dome",
+    "non_null_rows": 4588,
+    "missing_rows": 9250,
+    "non_null_share": 0.3315508021390374,
+    "missing_share": 0.6684491978609626
+  },
+  {
+    "variable_name": "domestic_general_government_health_expenditure_gghe_d_as_p_y",
+    "non_null_rows": 4588,
+    "missing_rows": 9250,
+    "non_null_share": 0.3315508021390374,
+    "missing_share": 0.6684491978609626
+  },
+  {
+    "variable_name": "domestic_general_government_health_expenditure_gghe_d_as_p_x",
+    "non_null_rows": 4588,
+    "missing_rows": 9250,
+    "non_null_share": 0.3315508021390374,
+    "missing_share": 0.6684491978609626
+  },
+  {
+    "variable_name": "domestic_private_health_expenditure_pvt_d_as_percentage_of",
+    "non_null_rows": 4588,
+    "missing_rows": 9250,
+    "non_null_share": 0.3315508021390374,
+    "missing_share": 0.6684491978609626
+  },
+  {
+    "variable_name": "domestic_general_government_health_expenditure_gghe_d_as_p",
+    "non_null_rows": 4588,
+    "missing_rows": 9250,
+    "non_null_share": 0.3315508021390374,
+    "missing_share": 0.6684491978609626
+  },
+  {
+    "variable_name": "external_health_expenditure_ext_as_percentage_of_current_h",
+    "non_null_rows": 4587,
+    "missing_rows": 9251,
+    "non_null_share": 0.3314785373608903,
+    "missing_share": 0.6685214626391097
+  },
+  {
+    "variable_name": "deaths_due_to_tuberculosis_among_hiv_negative_people_per_1",
+    "non_null_rows": 4402,
+    "missing_rows": 9436,
+    "non_null_share": 0.318109553403671,
+    "missing_share": 0.6818904465963289
+  },
+  {
+    "variable_name": "healthy_life_expectancy_hale_at_age_60_years",
+    "non_null_rows": 4070,
+    "missing_rows": 9768,
+    "non_null_share": 0.2941176470588235,
+    "missing_share": 0.7058823529411764
+  },
+  {
+    "variable_name": "life_expectancy_at_birth",
+    "non_null_rows": 4070,
+    "missing_rows": 9768,
+    "non_null_share": 0.2941176470588235,
+    "missing_share": 0.7058823529411764
+  },
+  {
+    "variable_name": "healthy_life_expectancy_hale_at_birth_years",
+    "non_null_rows": 4070,
+    "missing_rows": 9768,
+    "non_null_share": 0.2941176470588235,
+    "missing_share": 0.7058823529411764
+  },
+  {
+    "variable_name": "life_expectancy_at_age_60_years",
+    "non_null_rows": 4070,
+    "missing_rows": 9768,
+    "non_null_share": 0.2941176470588235,
+    "missing_share": 0.7058823529411764
+  },
+  {
+    "variable_name": "bcg_immunization_coverage_among_1_year_olds",
+    "non_null_rows": 3937,
+    "missing_rows": 9901,
+    "non_null_share": 0.284506431565255,
+    "missing_share": 0.715493568434745
+  }
+]

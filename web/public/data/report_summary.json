@@ -1,0 +1,100 @@
+{
+  "project_title": "Global Health Signals",
+  "project_subtitle": "Predicting life expectancy from WHO health-system indicators using TabPFN",
+  "analytical_question": "Can public health indicators from WHO explain and predict differences in life expectancy across countries?",
+  "dataset": {
+    "full_rows": 13838,
+    "full_columns": 46,
+    "countries": 218,
+    "min_year": 1932,
+    "max_year": 2024,
+    "modeling_rows": 4043,
+    "modeling_columns": 13
+  },
+  "best_model": {
+    "name": "tabpfn_priorlabs",
+    "test_mae": 0.937719816271692,
+    "test_rmse": 1.5199768357640833,
+    "test_r2": 0.9576862745949432
+  },
+  "executive_findings": [
+    {
+      "finding_id": "overall_error",
+      "finding": "TabPFN predicted recent country-year life expectancy with low average error.",
+      "metric": "mean_absolute_error",
+      "value": 0.937719816271692,
+      "context": "Average absolute prediction error across all test rows."
+    },
+    {
+      "finding_id": "best_region",
+      "finding": "Lowest regional prediction error.",
+      "metric": "South-East Asia",
+      "value": 0.5101617860892854,
+      "context": "Region where the model was most accurate on average."
+    },
+    {
+      "finding_id": "worst_region",
+      "finding": "Highest regional prediction error.",
+      "metric": "Africa",
+      "value": 1.1658910175657171,
+      "context": "Region where the model had the largest average error."
+    },
+    {
+      "finding_id": "best_year",
+      "finding": "Lowest yearly prediction error.",
+      "metric": "2015",
+      "value": 0.2874246143065875,
+      "context": "Test year with the lowest average absolute error."
+    },
+    {
+      "finding_id": "worst_year",
+      "finding": "Highest yearly prediction error.",
+      "metric": "2021",
+      "value": 1.812102739492346,
+      "context": "Test year with the highest average absolute error."
+    },
+    {
+      "finding_id": "positive_outlier",
+      "finding": "Observed life expectancy was higher than expected.",
+      "metric": "KWT 2021",
+      "value": 4.216292125039061,
+      "context": "Largest positive residual: actual minus predicted."
+    },
+    {
+      "finding_id": "negative_outlier",
+      "finding": "Observed life expectancy was lower than expected.",
+      "metric": "SWZ 2021",
+      "value": -10.519100899882815,
+      "context": "Largest negative residual: actual minus predicted."
+    },
+    {
+      "finding_id": "country_error_focus",
+      "finding": "Country with highest average prediction error across test years.",
+      "metric": "SWZ",
+      "value": 8.722116815288784,
+      "context": "Useful candidate for qualitative follow-up in the final report."
+    }
+  ],
+  "chapters": [
+    {
+      "id": "data_foundation",
+      "title": "The data foundation",
+      "description": "WHO indicators are broad, historical and unevenly complete across countries and years."
+    },
+    {
+      "id": "health_signals",
+      "title": "The health-system signals",
+      "description": "Mortality, immunization and expenditure signals structure the predictive layer."
+    },
+    {
+      "id": "prediction_layer",
+      "title": "The prediction layer",
+      "description": "TabPFN predicted recent life expectancy with lower error than linear and tree baselines."
+    },
+    {
+      "id": "residual_intelligence",
+      "title": "Residual intelligence",
+      "description": "Outliers reveal countries performing better or worse than expected given the available signals."
+    }
+  ]
+}

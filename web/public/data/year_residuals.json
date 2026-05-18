@@ -1,0 +1,79 @@
+[
+  {
+    "year": 2015,
+    "rows": 184,
+    "countries": 184,
+    "mean_actual": 71.64122841494566,
+    "mean_predicted": 71.68487368459287,
+    "mean_residual": -0.0436452696472168,
+    "mean_abs_error": 0.2874246143065875,
+    "median_abs_error": 0.1686668948535157,
+    "max_abs_error": 1.91031507523438
+  },
+  {
+    "year": 2016,
+    "rows": 184,
+    "countries": 184,
+    "mean_actual": 71.9056481296739,
+    "mean_predicted": 71.95906178847603,
+    "mean_residual": -0.053413658802119,
+    "mean_abs_error": 0.5006809823114807,
+    "median_abs_error": 0.2740308531005873,
+    "max_abs_error": 8.403009886240234
+  },
+  {
+    "year": 2017,
+    "rows": 184,
+    "countries": 184,
+    "mean_actual": 72.13937066755435,
+    "mean_predicted": 72.13237360249396,
+    "mean_residual": 0.0069970650603975,
+    "mean_abs_error": 0.6848149774534007,
+    "median_abs_error": 0.3874284661035148,
+    "max_abs_error": 9.583974634140624
+  },
+  {
+    "year": 2018,
+    "rows": 184,
+    "countries": 184,
+    "mean_actual": 72.37530872543479,
+    "mean_predicted": 72.34101511084515,
+    "mean_residual": 0.0342936145896315,
+    "mean_abs_error": 0.8503016929787278,
+    "median_abs_error": 0.5776794525781277,
+    "max_abs_error": 10.381785657382814
+  },
+  {
+    "year": 2019,
+    "rows": 184,
+    "countries": 184,
+    "mean_actual": 72.57688894625,
+    "mean_predicted": 72.51549799545951,
+    "mean_residual": 0.0613909507904848,
+    "mean_abs_error": 0.9820373254600454,
+    "median_abs_error": 0.679240667666015,
+    "max_abs_error": 10.154225925390628
+  },
+  {
+    "year": 2020,
+    "rows": 184,
+    "countries": 184,
+    "mean_actual": 72.01021307804348,
+    "mean_predicted": 72.4931903300078,
+    "mean_residual": -0.4829772519643235,
+    "mean_abs_error": 1.446676381899255,
+    "median_abs_error": 1.0838987622753926,
+    "max_abs_error": 10.172562245468749
+  },
+  {
+    "year": 2021,
+    "rows": 184,
+    "countries": 184,
+    "mean_actual": 71.23893805097826,
+    "mean_predicted": 72.3406773650128,
+    "mean_residual": -1.1017393140345295,
+    "mean_abs_error": 1.812102739492346,
+    "median_abs_error": 1.3556058528515609,
+    "max_abs_error": 10.519100899882815
+  }
+]

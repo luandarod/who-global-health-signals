@@ -1,0 +1,23 @@
+[
+  {
+    "model": "tabpfn_priorlabs",
+    "test_rows": 1288,
+    "test_mae": 0.937719816271692,
+    "test_rmse": 1.5199768357640833,
+    "test_r2": 0.9576862745949432
+  },
+  {
+    "model": "random_forest",
+    "test_rows": 1288,
+    "test_mae": 1.875501143245808,
+    "test_rmse": 2.5325769695089893,
+    "test_r2": 0.8825284684426731
+  },
+  {
+    "model": "ridge",
+    "test_rows": 1288,
+    "test_mae": 2.8149645211486405,
+    "test_rmse": 3.6373971215450056,
+    "test_r2": 0.7576802779752658
+  }
+]

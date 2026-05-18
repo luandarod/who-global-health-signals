@@ -64,21 +64,26 @@ def read_csv(path: Path) -> pd.DataFrame:
 
 
 def sanitize_json_value(value: Any) -> Any:
-    """Convert pandas/numpy missing values into valid JSON nulls.
+    """Convert missing values into valid JSON nulls.
 
-    Python's json.dump can otherwise write NaN, which is not valid JSON for
-    browser JSON.parse/fetch parsing.
+    The order matters: lists and dicts must be handled before pd.isna(),
+    because pd.isna(list_like) returns an array and cannot be used as a boolean.
     """
     if value is None:
-        return None
-    if pd.isna(value):
-        return None
-    if isinstance(value, float) and (math.isnan(value) or math.isinf(value)):
         return None
     if isinstance(value, dict):
         return {str(key): sanitize_json_value(item) for key, item in value.items()}
     if isinstance(value, list):
         return [sanitize_json_value(item) for item in value]
+    if isinstance(value, tuple):
+        return [sanitize_json_value(item) for item in value]
+    if isinstance(value, float) and (math.isnan(value) or math.isinf(value)):
+        return None
+    try:
+        if pd.isna(value):
+            return None
+    except (TypeError, ValueError):
+        pass
     return value
 
 

@@ -17,7 +17,7 @@ env/
 .env.*.local
 
 # Data outputs
-# Keep folders, ignore generated data by default.
+# Keep raw/interim/processed datasets and generated analytical outputs ignored by default.
 data/raw/*
 data/interim/*
 data/processed/*
@@ -31,6 +31,13 @@ outputs/tables/*
 !outputs/figures/.gitkeep
 !outputs/tables/.gitkeep
 
+# Web report public assets
+# The interactive report is static on Vercel, so the exported JSON files used by Astro/Svelte are intentionally versioned here.
+!web/public/
+!web/public/data/
+!web/public/data/*.json
+!web/public/data/.gitkeep
+
 # Reports
 reports/*.html
 reports/*.pdf
@@ -42,7 +49,7 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Node / web layer, for later
+# Node / web layer
 node_modules/
 dist/
 .astro/

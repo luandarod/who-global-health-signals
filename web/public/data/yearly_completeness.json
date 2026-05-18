@@ -1,0 +1,177 @@
+[
+  {
+    "year": 2000,
+    "mean_completeness": 0.7163689391177543,
+    "median_completeness": 0.7307692307692307,
+    "countries": 211,
+    "rows": 211
+  },
+  {
+    "year": 2001,
+    "mean_completeness": 0.7188644688644689,
+    "median_completeness": 0.7307692307692307,
+    "countries": 210,
+    "rows": 210
+  },
+  {
+    "year": 2002,
+    "mean_completeness": 0.7382739212007504,
+    "median_completeness": 0.7692307692307693,
+    "countries": 205,
+    "rows": 205
+  },
+  {
+    "year": 2003,
+    "mean_completeness": 0.7223842508202698,
+    "median_completeness": 0.7307692307692307,
+    "countries": 211,
+    "rows": 211
+  },
+  {
+    "year": 2004,
+    "mean_completeness": 0.7249084249084249,
+    "median_completeness": 0.75,
+    "countries": 210,
+    "rows": 210
+  },
+  {
+    "year": 2005,
+    "mean_completeness": 0.726923076923077,
+    "median_completeness": 0.7307692307692307,
+    "countries": 210,
+    "rows": 210
+  },
+  {
+    "year": 2006,
+    "mean_completeness": 0.7433395872420263,
+    "median_completeness": 0.7692307692307693,
+    "countries": 205,
+    "rows": 205
+  },
+  {
+    "year": 2007,
+    "mean_completeness": 0.73003663003663,
+    "median_completeness": 0.7307692307692307,
+    "countries": 210,
+    "rows": 210
+  },
+  {
+    "year": 2008,
+    "mean_completeness": 0.7271062271062271,
+    "median_completeness": 0.7307692307692307,
+    "countries": 210,
+    "rows": 210
+  },
+  {
+    "year": 2009,
+    "mean_completeness": 0.7302197802197802,
+    "median_completeness": 0.7692307692307693,
+    "countries": 210,
+    "rows": 210
+  },
+  {
+    "year": 2010,
+    "mean_completeness": 0.7410256410256411,
+    "median_completeness": 0.7692307692307693,
+    "countries": 210,
+    "rows": 210
+  },
+  {
+    "year": 2011,
+    "mean_completeness": 0.7497265767407947,
+    "median_completeness": 0.8076923076923077,
+    "countries": 211,
+    "rows": 211
+  },
+  {
+    "year": 2012,
+    "mean_completeness": 0.7586080586080587,
+    "median_completeness": 0.8076923076923077,
+    "countries": 210,
+    "rows": 210
+  },
+  {
+    "year": 2013,
+    "mean_completeness": 0.7568355814801313,
+    "median_completeness": 0.8076923076923077,
+    "countries": 211,
+    "rows": 211
+  },
+  {
+    "year": 2014,
+    "mean_completeness": 0.7748319641523524,
+    "median_completeness": 0.8461538461538461,
+    "countries": 206,
+    "rows": 206
+  },
+  {
+    "year": 2015,
+    "mean_completeness": 0.7720178372352287,
+    "median_completeness": 0.8076923076923077,
+    "countries": 207,
+    "rows": 207
+  },
+  {
+    "year": 2016,
+    "mean_completeness": 0.7729468599033816,
+    "median_completeness": 0.8076923076923077,
+    "countries": 207,
+    "rows": 207
+  },
+  {
+    "year": 2017,
+    "mean_completeness": 0.7593875318993802,
+    "median_completeness": 0.8076923076923077,
+    "countries": 211,
+    "rows": 211
+  },
+  {
+    "year": 2018,
+    "mean_completeness": 0.7469729344729344,
+    "median_completeness": 0.8076923076923077,
+    "countries": 216,
+    "rows": 216
+  },
+  {
+    "year": 2019,
+    "mean_completeness": 0.7572568940493469,
+    "median_completeness": 0.8076923076923077,
+    "countries": 212,
+    "rows": 212
+  },
+  {
+    "year": 2020,
+    "mean_completeness": 0.7585572322414428,
+    "median_completeness": 0.8076923076923077,
+    "countries": 209,
+    "rows": 209
+  },
+  {
+    "year": 2021,
+    "mean_completeness": 0.7520962449872401,
+    "median_completeness": 0.8076923076923077,
+    "countries": 211,
+    "rows": 211
+  },
+  {
+    "year": 2022,
+    "mean_completeness": 0.6522056142909224,
+    "median_completeness": 0.6923076923076923,
+    "countries": 211,
+    "rows": 211
+  },
+  {
+    "year": 2023,
+    "mean_completeness": 0.6457204767063922,
+    "median_completeness": 0.6923076923076923,
+    "countries": 213,
+    "rows": 213
+  },
+  {
+    "year": 2024,
+    "mean_completeness": 0.32674165457184323,
+    "median_completeness": 0.3461538461538461,
+    "countries": 212,
+    "rows": 212
+  }
+]

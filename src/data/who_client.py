@@ -8,14 +8,72 @@ abstractions.
 
 from __future__ import annotations
 
+import base64
 from dataclasses import dataclass
+from functools import lru_cache
+import os
+from pathlib import Path
+import platform
+import ssl
+import tempfile
+import textwrap
 from typing import Any
 
+import certifi
 import pandas as pd
 import requests
 
 
 DEFAULT_BASE_URL = "https://ghoapi.azureedge.net/api"
+WINDOWS_CERT_STORES = ("ROOT", "CA")
+
+
+def _env_flag(name: str) -> str | None:
+    value = os.getenv(name)
+    if value is None:
+        return None
+    return value.strip().lower()
+
+
+@lru_cache(maxsize=1)
+def build_windows_ca_bundle() -> str:
+    certifi_bundle = Path(certifi.where())
+    bundle_parts: list[str] = []
+    if certifi_bundle.exists():
+        bundle_parts.append(certifi_bundle.read_text(encoding="ascii"))
+
+    seen: set[bytes] = set()
+    for store_name in WINDOWS_CERT_STORES:
+        for cert_bytes, encoding, trust in ssl.enum_certificates(store_name):
+            if encoding != "x509_asn" or cert_bytes in seen:
+                continue
+            seen.add(cert_bytes)
+            encoded = base64.encodebytes(cert_bytes).decode("ascii").replace("\n", "")
+            wrapped = "\n".join(textwrap.wrap(encoded, 64))
+            bundle_parts.append(f"-----BEGIN CERTIFICATE-----\n{wrapped}\n-----END CERTIFICATE-----\n")
+
+    bundle_path = Path(tempfile.gettempdir()) / "who-gho-windows-ca-bundle.pem"
+    bundle_path.write_text("".join(bundle_parts), encoding="ascii")
+    return str(bundle_path)
+
+
+@lru_cache(maxsize=1)
+def resolve_requests_verify() -> bool | str:
+    explicit_verify = _env_flag("WHO_GHO_SSL_VERIFY")
+    if explicit_verify in {"0", "false", "no", "off"}:
+        return False
+
+    bundle_override = os.getenv("WHO_GHO_CA_BUNDLE")
+    if bundle_override:
+        return bundle_override
+
+    if platform.system() == "Windows":
+        try:
+            return build_windows_ca_bundle()
+        except Exception:
+            return certifi.where()
+
+    return certifi.where()
 
 
 @dataclass(frozen=True)
@@ -24,6 +82,7 @@ class WHOGHOClient:
 
     base_url: str = DEFAULT_BASE_URL
     timeout: int = 60
+    verify: bool | str | None = None
 
     def _url(self, path: str) -> str:
         clean_path = path.strip("/")
@@ -31,7 +90,8 @@ class WHOGHOClient:
 
     def get_json(self, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
         """Return raw JSON from an API path."""
-        response = requests.get(self._url(path), params=params, timeout=self.timeout)
+        verify = resolve_requests_verify() if self.verify is None else self.verify
+        response = requests.get(self._url(path), params=params, timeout=self.timeout, verify=verify)
         response.raise_for_status()
         return response.json()
 
@@ -105,6 +165,12 @@ def normalize_indicator_frame(frame: pd.DataFrame, value_column: str = "NumericV
         "TimeDim",
         "Dim1Type",
         "Dim1",
+        "Dim2Type",
+        "Dim2",
+        "Dim3Type",
+        "Dim3",
+        "Dim4Type",
+        "Dim4",
         value_column,
         "Low",
         "High",

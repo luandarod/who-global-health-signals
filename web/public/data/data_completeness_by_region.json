@@ -1,43 +1,43 @@
 [
   {
     "region": "Africa",
-    "mean_completeness": 0.6644901728004221,
+    "mean_completeness": 0.8345543345543346,
     "countries": 48,
     "rows": 1197
   },
   {
     "region": "South-East Asia",
-    "mean_completeness": 0.6572631578947369,
+    "mean_completeness": 0.829076923076923,
     "countries": 10,
     "rows": 250
   },
   {
     "region": "Eastern Mediterranean",
-    "mean_completeness": 0.6185645933014354,
+    "mean_completeness": 0.7863636363636364,
     "countries": 22,
     "rows": 550
   },
   {
     "region": "Europe",
-    "mean_completeness": 0.5492633154743145,
+    "mean_completeness": 0.6904364348226624,
     "countries": 54,
     "rows": 1336
   },
   {
     "region": "Americas",
-    "mean_completeness": 0.5294587178847593,
+    "mean_completeness": 0.6682464454976303,
     "countries": 46,
     "rows": 1055
   },
   {
     "region": "Western Pacific",
-    "mean_completeness": 0.5041128870460777,
+    "mean_completeness": 0.6440230671488613,
     "countries": 35,
     "rows": 787
   },
   {
     "region": null,
-    "mean_completeness": 0.05938833570412515,
+    "mean_completeness": 0.0743243243243243,
     "countries": 3,
     "rows": 74
   }

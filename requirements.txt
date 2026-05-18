@@ -1,4 +1,4 @@
-# Core data stack
+﻿# Core data stack
 pandas>=2.2.0
 numpy>=1.26.0
 requests>=2.32.0
@@ -9,6 +9,9 @@ pyarrow>=16.0.0
 # Analysis and modeling
 scikit-learn>=1.5.0
 scipy>=1.13.0
+xgboost>=2.1.0
+lightgbm>=4.6.0
+catboost>=1.2.8
 
 # Visualization
 matplotlib>=3.8.0
@@ -23,4 +26,4 @@ ipykernel>=6.29.0
 ruff>=0.5.0
 
 # Prior Labs / TabPFN
-# This project uses the Prior Labs REST API directly for the first TabPFN run.
+# The project keeps TabPFN as an optional external benchmark via the Prior Labs REST API.

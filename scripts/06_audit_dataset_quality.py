@@ -113,12 +113,25 @@ def build_country_coverage(dataset: pd.DataFrame) -> pd.DataFrame:
     )
 
 
-def build_modeling_ready_dataset(dataset: pd.DataFrame, missingness: pd.DataFrame) -> pd.DataFrame:
+def filter_modeling_rows(dataset: pd.DataFrame) -> pd.DataFrame:
     if TARGET_COLUMN not in dataset.columns:
         raise SystemExit(f"Target column not found: {TARGET_COLUMN}")
 
-    keep_variables = missingness.loc[
-        missingness["non_null_share"] >= MIN_VARIABLE_NON_NULL_SHARE,
+    modeling = dataset.loc[dataset["year"] >= MIN_YEAR].copy()
+    modeling = modeling.loc[modeling[TARGET_COLUMN].notna()].copy()
+
+    if "data_completeness_score" in modeling.columns:
+        modeling = modeling.loc[modeling["data_completeness_score"] >= MIN_COMPLETENESS_SCORE].copy()
+
+    return modeling
+
+
+def build_modeling_ready_dataset(dataset: pd.DataFrame, missingness: pd.DataFrame) -> pd.DataFrame:
+    modeling = filter_modeling_rows(dataset)
+    modeling_missingness = build_missingness_table(modeling, get_indicator_columns(modeling))
+
+    keep_variables = modeling_missingness.loc[
+        modeling_missingness["non_null_share"] >= MIN_VARIABLE_NON_NULL_SHARE,
         "variable_name",
     ].tolist()
 
@@ -129,13 +142,7 @@ def build_modeling_ready_dataset(dataset: pd.DataFrame, missingness: pd.DataFram
     keep_columns += [col for col in keep_variables if col in dataset.columns]
     keep_columns += [col for col in QUALITY_COLUMNS if col in dataset.columns]
 
-    modeling = dataset.loc[:, keep_columns].copy()
-    modeling = modeling.loc[modeling["year"] >= MIN_YEAR].copy()
-    modeling = modeling.loc[modeling[TARGET_COLUMN].notna()].copy()
-
-    if "data_completeness_score" in modeling.columns:
-        modeling = modeling.loc[modeling["data_completeness_score"] >= MIN_COMPLETENESS_SCORE].copy()
-
+    modeling = modeling.loc[:, keep_columns].copy()
     modeling = modeling.sort_values(["country_code", "year"]).reset_index(drop=True)
     return modeling
 

@@ -1,0 +1,409 @@
+---
+import BenchmarkComparison from './BenchmarkComparison.svelte';
+import CountryCaseExplorer from './CountryCaseExplorer.svelte';
+import ExecutiveSummary from './ExecutiveSummary.svelte';
+import FindingHighlights from './FindingHighlights.svelte';
+import GlossaryTerm from './GlossaryTerm.svelte';
+import MetricSummary from './MetricSummary.svelte';
+import MultiSeriesLineChart from './MultiSeriesLineChart.svelte';
+import RankingChart from './RankingChart.svelte';
+import ResponseSurfaceHeatmap from './ResponseSurfaceHeatmap.svelte';
+import ScatterEvidenceChart from './ScatterEvidenceChart.svelte';
+import { formatModelName, formatNumber } from '../lib/presentation.js';
+import championPredictions from '../../public/data/champion_predictions.json';
+import completeness from '../../public/data/data_completeness_by_region.json';
+import countryResiduals from '../../public/data/country_residuals_top.json';
+import lifeTrends from '../../public/data/life_expectancy_trends.json';
+import modelErrorByYear from '../../public/data/model_error_by_year.json';
+import models from '../../public/data/model_comparison.json';
+import regionResiduals from '../../public/data/region_residuals.json';
+import summary from '../../public/data/report_summary.json';
+import surfaces from '../../public/data/model_response_surfaces.json';
+import coverage from '../../public/data/variable_coverage.json';
+import yearResiduals from '../../public/data/year_residuals.json';
+import yearlyCompleteness from '../../public/data/yearly_completeness.json';
+
+const localChampion = (models ?? []).find((row) => row.dependency !== 'priorlabs_api');
+const bestModelName = formatModelName(summary.best_model?.name);
+const localChampionName = formatModelName(localChampion?.model);
+const topModelNames = (models ?? []).slice(0, 4).map((row) => row.model);
+const modelColorMap = {
+  tabpfn_priorlabs: '#d9ff79',
+  ridge: '#90d7ff',
+  elastic_net: '#f2c572',
+  lightgbm: '#ff9477',
+  gradient_boosting: '#d4a6ff',
+};
+const regionColorMap = {
+  Africa: '#90d7ff',
+  Americas: '#d9ff79',
+  Europe: '#f2c572',
+  'Eastern Mediterranean': '#ff9477',
+  'South-East Asia': '#d4a6ff',
+  'Western Pacific': '#7be0c5',
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Global Health Signals | WHO benchmark for life expectancy</title>
+    <meta
+      name="description"
+      content="Executive analytical report using WHO Global Health Observatory data to explain, benchmark and interpret life expectancy differences across countries."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root { --bg:#07111a; --ink:#f4efe3; --soft:#d7cfbf; --muted:#9fa9ad; --line:rgba(244,239,227,.12); --lime:#d9ff79; --panel:rgba(255,255,255,.03); }
+      * { box-sizing: border-box; }
+      html { background: var(--bg); scroll-behavior: smooth; }
+      body { margin: 0; color: var(--ink); font-family: 'Space Grotesk', system-ui, sans-serif; background:
+        radial-gradient(circle at 10% 20%, rgba(144,215,255,.14), transparent 30%),
+        radial-gradient(circle at 85% 18%, rgba(217,255,121,.12), transparent 24%),
+        linear-gradient(180deg, #081019 0%, #07111a 55%, #09131d 100%); }
+      body:before { content:''; position:fixed; inset:0; background:
+        linear-gradient(rgba(244,239,227,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(244,239,227,.02) 1px, transparent 1px);
+        background-size:72px 72px; z-index:-1; }
+      a { color: inherit; text-decoration: none; }
+      .mono, .eyebrow, .nav, .section-label, .chip { font-family: 'IBM Plex Mono', monospace; }
+      .topbar { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--line); background: rgba(7,17,26,.84); backdrop-filter: blur(18px); }
+      .topbar-inner { max-width: 1480px; margin: 0 auto; padding: 16px 28px; display: flex; justify-content: space-between; align-items: center; gap: 18px; }
+      .brand { font-size: 12px; text-transform: uppercase; letter-spacing: .14em; color: var(--lime); font-weight: 700; }
+      .nav { display:flex; gap: 12px; flex-wrap: wrap; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+      .nav a { padding: 8px 10px; border: 1px solid transparent; border-radius: 999px; }
+      .nav a:hover { color: var(--ink); border-color: var(--line); background: rgba(255,255,255,.025); }
+      .shell { max-width: 1480px; margin: 0 auto; padding: 0 28px 32px; }
+      .hero { min-height: calc(100vh - 74px); display:grid; align-items:end; padding: 86px 0 60px; }
+      .eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: .14em; color: var(--lime); }
+      h1 { margin: 20px 0 26px; max-width: 1180px; font-size: clamp(56px, 8.2vw, 124px); line-height: .88; letter-spacing: -.055em; }
+      h1 em { font-style: normal; color: transparent; -webkit-text-stroke: 1px rgba(244,239,227,.66); }
+      .hero-grid { display:grid; grid-template-columns: 1.05fr .95fr; gap: 18px; border-top: 1px solid var(--line); padding-top: 22px; }
+      .lead { margin: 0; font-size: 24px; line-height: 1.32; color: #ecdfcd; }
+      .note-card { border: 1px solid var(--line); border-radius: 28px; padding: 22px; background: linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.018)); }
+      .note-card p { margin: 0; color: var(--soft); line-height: 1.52; font-size: 15px; }
+      .chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:18px; }
+      .chip { padding:8px 10px; border:1px solid var(--line); border-radius:999px; background: rgba(255,255,255,.02); color: var(--muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+      .section { padding: 92px 0; border-top: 1px solid var(--line); scroll-margin-top: 84px; }
+      .section-head { display:grid; grid-template-columns: 240px 1fr; gap: 34px; margin-bottom: 30px; }
+      .section-label { color: var(--lime); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding-top: 8px; }
+      .section-label:after { content:''; display:block; width:100%; height:1px; margin-top:18px; background: var(--line); }
+      .section h2 { margin:0; max-width: 1020px; font-size: clamp(40px, 4.8vw, 76px); line-height: .98; letter-spacing: -.04em; }
+      .section-copy { margin: 18px 0 0; max-width: 920px; color: var(--muted); font-size: 18px; line-height: 1.55; }
+      .flow { display:grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+      .flow-step { min-height: 128px; position:relative; border: 1px solid var(--line); border-radius: 22px; padding: 18px; background: rgba(255,255,255,.02); }
+      .flow-step:not(:last-child):after { content:'->'; position:absolute; right:-13px; top:44%; color: var(--lime); font-family:'IBM Plex Mono'; }
+      .flow-step small { color: var(--lime); font-family:'IBM Plex Mono'; font-size:10px; letter-spacing:.12em; text-transform:uppercase; }
+      .flow-step strong { display:block; margin:10px 0 6px; font-size: 20px; letter-spacing:-.03em; }
+      .flow-step span { color: var(--muted); font-size: 13px; line-height: 1.38; }
+      .grid2 { display:grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      .grid3 { display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+      .panel { border: 1px solid var(--line); border-radius: 24px; padding: 20px; background: var(--panel); }
+      .panel h3 { margin:0 0 10px; font-size: 24px; line-height: 1.05; }
+      .panel p { margin:0; color: var(--muted); font-size: 14px; line-height: 1.48; }
+      .footer { padding: 70px 0 30px; border-top:1px solid var(--line); color: var(--muted); font-size:14px; line-height:1.5; }
+      @media (max-width: 1160px) {
+        .topbar-inner, .hero-grid, .section-head, .grid2, .grid3, .flow { grid-template-columns: 1fr; }
+        .topbar-inner { align-items:flex-start; flex-direction:column; }
+        .flow-step:after { display:none; }
+      }
+      @media (max-width: 720px) {
+        .shell { padding: 0 18px 18px; }
+        .topbar-inner { padding: 14px 18px; }
+        .hero { min-height:auto; padding: 58px 0; }
+        h1 { font-size: clamp(48px, 15vw, 84px); }
+        .lead { font-size: 20px; }
+        .section { padding: 74px 0; }
+        .section h2 { font-size: 42px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="#top">Global Health Signals</a>
+        <nav class="nav" aria-label="Report navigation">
+          <a href="#question">Question</a>
+          <a href="#data">Data foundation</a>
+          <a href="#benchmark">Benchmark</a>
+          <a href="#residuals">Residuals</a>
+          <a href="#surfaces">Model behavior</a>
+          <a href="#sources">Sources</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="shell">
+      <main id="top">
+        <section class="hero">
+          <div>
+            <p class="eyebrow">WHO GHO data / executive case / native chart evidence</p>
+            <h1>Public health data can explain and predict <em>life expectancy differences at global scale.</em></h1>
+            <div class="hero-grid">
+              <p class="lead">{summary.analytical_question}</p>
+              <div class="note-card">
+                <p>
+                  This report starts with the answer, not just the method. It shows that the WHO public indicator layer is
+                  strong enough to support a serious predictive benchmark, then uses residuals to show where additional context is still needed.
+                </p>
+                <div class="chips">
+                  <span class="chip">Business-case summary</span>
+                  <span class="chip">Native chart evidence</span>
+                  <span class="chip">Temporal benchmark</span>
+                  <span class="chip">Residual follow-up</span>
+                </div>
+              </div>
+            </div>
+            <ExecutiveSummary summary={summary} models={models} client:load />
+          </div>
+        </section>
+
+        <section class="section" id="question">
+          <div class="section-head">
+            <span class="section-label">01 / Question and method</span>
+            <div>
+              <h2>A country-year benchmark with a forward-looking holdout.</h2>
+              <p class="section-copy">
+                The analytical unit is a country in a year. The target is life expectancy at birth. Features span mortality,
+                immunization, expenditure, disease, and data quality signals. The benchmark trains before 2015 and tests on 2015+ records so the result behaves like a genuine future-facing evaluation.
+              </p>
+            </div>
+          </div>
+
+          <div class="flow">
+            <div class="flow-step"><small>01</small><strong>Acquire</strong><span>Pull public indicators from the WHO GHO OData API.</span></div>
+            <div class="flow-step"><small>02</small><strong>Structure</strong><span>Normalize them into a single country-year panel.</span></div>
+            <div class="flow-step"><small>03</small><strong>Audit</strong><span>Keep coverage and completeness visible before modeling.</span></div>
+            <div class="flow-step"><small>04</small><strong>Benchmark</strong><span>Compare local trainable models with the external TabPFN reference.</span></div>
+            <div class="flow-step"><small>05</small><strong>Interpret</strong><span>Use residuals to surface countries, regions and years worth follow-up.</span></div>
+          </div>
+        </section>
+
+        <section class="section" id="data">
+          <div class="section-head">
+            <span class="section-label">02 / Data foundation</span>
+            <div>
+              <h2>The panel is broad, but support still varies across time and region.</h2>
+              <p class="section-copy">
+                The predictive story is strong partly because the retained panel is structured and quality-filtered. Coverage, completeness, and long-run regional trajectories help explain why the benchmark is credible and where it is structurally weaker.
+              </p>
+            </div>
+          </div>
+
+          <MetricSummary summary={summary} client:load />
+
+          <div class="grid2">
+            <RankingChart
+              title="Variable coverage"
+              description="The most reusable indicators appear consistently enough to anchor the panel."
+              whyItMatters="Coverage tells us which features are available broadly enough to matter in global comparison."
+              data={coverage}
+              labelKey="variable_name"
+              valueKey="non_null_share"
+              mode="percent"
+              limit={12}
+              client:load
+            />
+            <MultiSeriesLineChart
+              title="Yearly data completeness"
+              description="Completeness improves meaningfully in the modern period."
+              whyItMatters="Better supported recent years make the holdout benchmark more interpretable."
+              data={(yearlyCompleteness ?? []).map((row) => ({ year: row.year, value: row.mean_completeness, series: 'mean completeness' }))}
+              yKey="value"
+              yLabel="Completeness"
+              client:load
+            />
+            <RankingChart
+              title="Completeness by region"
+              description="Data support is not region-neutral."
+              whyItMatters="Some regional comparisons are backed by denser monitoring than others."
+              data={completeness}
+              labelKey="region"
+              valueKey="mean_completeness"
+              mode="percent"
+              limit={8}
+              client:load
+            />
+            <MultiSeriesLineChart
+              title="Life expectancy trend by region"
+              description="Regional trajectories remain structured enough to carry predictive signal."
+              whyItMatters="The panel keeps real temporal shape, not just static cross-sectional differences."
+              data={lifeTrends.map((row) => ({ year: row.year, value: row.life_expectancy, series: row.region }))}
+              yKey="value"
+              yLabel="Life expectancy"
+              colorMap={regionColorMap}
+              client:load
+            />
+          </div>
+        </section>
+
+        <section class="section" id="benchmark">
+          <div class="section-head">
+            <span class="section-label">03 / What the data says</span>
+            <div>
+              <h2>The answer to the target question is substantively yes.</h2>
+              <p class="section-copy">
+                The WHO public indicator panel explains observed life expectancy so well that even local trainable models stay close to the final champion. That means the relationship is not only statistically present, but operationally useful for monitoring and comparative analysis.
+                The benchmark is summarized with <GlossaryTerm term="mae" /> as the main ranking metric, supported by <GlossaryTerm term="rmse" /> and <GlossaryTerm term="r2" /> for shape and fit.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid3">
+            <div class="panel">
+              <h3>Strong predictive signal</h3>
+              <p>
+                The final champion, <b>{bestModelName}</b>, reaches {formatNumber(summary.best_model.test_mae, 3)} years of MAE and {formatNumber(summary.best_model.test_r2, 4)} of R2, showing that the retained WHO features explain most observable variation in life expectancy on the holdout.
+              </p>
+            </div>
+            <div class="panel">
+              <h3>Local benchmark still matters</h3>
+              <p>
+                The strongest local model, <b>{localChampionName}</b>, remains highly competitive at {formatNumber(localChampion?.test_mae, 3)} MAE. The result is not “one black box wins”; it is “the signal is strong across model families.”
+              </p>
+            </div>
+            <div class="panel">
+              <h3>Residuals still add value</h3>
+              <p>
+                Strong performance does not erase uncertainty. Some regions, years, and countries still deviate from the expected pattern, which turns the residual layer into a practical follow-up tool rather than a technical appendix.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid2" style="margin-top:14px">
+            <ScatterEvidenceChart
+              title="Champion observed vs predicted"
+              description="The final winner stays close to the diagonal across the holdout."
+              whyItMatters="A visually tight scatter confirms that the benchmark is not only winning on a table but also tracking the observed outcomes closely."
+              data={championPredictions}
+              client:load
+            />
+            <RankingChart
+              title="Final model comparison"
+              description="The external reference wins, but several local baselines remain strong."
+              whyItMatters="This is the cleanest ranking view of the final answer."
+              data={models}
+              labelKey="model"
+              valueKey="test_mae"
+              mode="number"
+              limit={8}
+              modelLabels={true}
+              highlightFirst={true}
+              client:load
+            />
+          </div>
+
+          <div class="grid2" style="margin-top:14px">
+            <BenchmarkComparison models={models} client:load />
+            <MultiSeriesLineChart
+              title="Model error over time"
+              description="The best models remain separated, but recent years are harder for everyone."
+              whyItMatters="This replaces the static yearly error figures with a comparative native view."
+              data={modelErrorByYear.filter((row) => topModelNames.includes(row.model))}
+              xKey="year"
+              yKey="mean_abs_error"
+              seriesKey="model"
+              yLabel="Mean absolute error"
+              colorMap={modelColorMap}
+              client:load
+            />
+          </div>
+        </section>
+
+        <section class="section" id="residuals">
+          <div class="section-head">
+            <span class="section-label">04 / Residual intelligence</span>
+            <div>
+              <h2>The remaining error becomes the follow-up agenda.</h2>
+              <p class="section-copy">
+                Residuals show where observed life expectancy is above or below the level implied by the available public indicators. That does not prove causality, but it does show where deeper country context is likely to pay off.
+              </p>
+            </div>
+          </div>
+
+          <FindingHighlights findings={summary.executive_findings} client:load />
+
+          <div class="grid2" style="margin-top:14px">
+            <RankingChart
+              title="Regional model difficulty"
+              description="Some WHO regions remain harder to predict than others."
+              whyItMatters="Regional differences help locate where the model is still most stressed."
+              data={regionResiduals}
+              labelKey="region"
+              valueKey="mean_abs_error"
+              mode="number"
+              client:load
+            />
+            <MultiSeriesLineChart
+              title="Residual stress by year"
+              description="Recent disruptions made the holdout period harder to model."
+              whyItMatters="The residual trend helps distinguish a strong model from a static one."
+              data={(yearResiduals ?? []).map((row) => ({ year: row.year, value: row.mean_abs_error, series: 'holdout error' }))}
+              yKey="value"
+              yLabel="Mean absolute error"
+              client:load
+            />
+          </div>
+
+          <div style="margin-top:14px">
+            <CountryCaseExplorer countries={countryResiduals} client:load />
+          </div>
+        </section>
+
+        <section class="section" id="surfaces">
+          <div class="section-head">
+            <span class="section-label">05 / Model behavior</span>
+            <div>
+              <h2>Response surfaces show how local models react when strong signals move together.</h2>
+              <p class="section-copy">
+                Instead of embedding PNG surfaces, the report now renders native heatmaps. They are easier to read in-browser and better suited to executive review, while still showing how paired signals shift predicted life expectancy inside the model.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid2">
+            {surfaces.slice(0, 2).map((surface) => <ResponseSurfaceHeatmap surface={surface} client:load />)}
+          </div>
+        </section>
+
+        <section class="section" id="sources">
+          <div class="section-head">
+            <span class="section-label">06 / Sources and limits</span>
+            <div>
+              <h2>Reproducible benchmark, explicit limits, no hidden claims.</h2>
+              <p class="section-copy">
+                The site is built from the same exported analytical assets used by the pipeline. The local benchmark is fully trainable in-repo. TabPFN remains an external reference. Strong predictive performance should be read as evidence of usable signal, not as proof of causality.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid3">
+            <div class="panel">
+              <h3>Data source</h3>
+              <p>WHO Global Health Observatory indicators rebuilt into a country-year panel with upstream quality controls.</p>
+            </div>
+            <div class="panel">
+              <h3>Benchmark frame</h3>
+              <p>Local linear, tree, boosting and instance-based models compared with the optional external TabPFN reference on a temporal holdout.</p>
+            </div>
+            <div class="panel">
+              <h3>Interpretation guardrail</h3>
+              <p>Scores summarize predictive fit. Residuals and response surfaces guide interpretation, but they do not establish causal effect by themselves.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        Global Health Signals now opens as an executive case: what we analyzed, what the data shows, how strong the benchmark is, and where the remaining uncertainty still deserves attention.
+      </footer>
+    </div>
+  </body>
+</html>

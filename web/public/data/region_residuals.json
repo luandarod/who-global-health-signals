@@ -1,74 +1,74 @@
 [
   {
-    "region": "Africa",
-    "rows": 329,
-    "countries": 47,
-    "mean_actual": 63.45351939401216,
-    "mean_predicted": 63.7899804622569,
-    "mean_residual": -0.3364610682447403,
-    "mean_abs_error": 1.1658910175657171,
-    "median_abs_error": 0.7041968646093721,
-    "max_abs_error": 10.519100899882815,
-    "mean_data_completeness": 0.7536394176931691
-  },
-  {
-    "region": "Europe",
-    "rows": 350,
-    "countries": 50,
-    "mean_actual": 77.72902197111428,
-    "mean_predicted": 77.95993153163364,
-    "mean_residual": -0.2309095605193641,
-    "mean_abs_error": 1.0001327325446985,
-    "median_abs_error": 0.6301863558789051,
-    "max_abs_error": 6.818238388046879,
-    "mean_data_completeness": 0.6325563909774436
-  },
-  {
     "region": "Eastern Mediterranean",
     "rows": 154,
     "countries": 22,
     "mean_actual": 72.10894841935065,
-    "mean_predicted": 72.38876833234515,
-    "mean_residual": -0.2798199129944955,
-    "mean_abs_error": 0.9405065613772066,
-    "median_abs_error": 0.6440399113574244,
-    "max_abs_error": 4.698912756249996,
-    "mean_data_completeness": 0.6864319890635681
+    "mean_predicted": 72.0291011364429,
+    "mean_residual": 0.0798472829077467,
+    "mean_abs_error": 0.1286906177816815,
+    "median_abs_error": 0.0659253833691408,
+    "max_abs_error": 0.8719787027929726,
+    "mean_data_completeness": 0.8296703296703297
+  },
+  {
+    "region": "Africa",
+    "rows": 329,
+    "countries": 47,
+    "mean_actual": 63.45351939401216,
+    "mean_predicted": 63.39310327779196,
+    "mean_residual": 0.0604161162201984,
+    "mean_abs_error": 0.1254140971857785,
+    "median_abs_error": 0.0837688405957024,
+    "max_abs_error": 0.6323420293359376,
+    "mean_data_completeness": 0.8994622398877717
   },
   {
     "region": "Americas",
     "rows": 231,
     "countries": 33,
     "mean_actual": 74.60334482567099,
-    "mean_predicted": 74.85598703689905,
-    "mean_residual": -0.2526422112280592,
-    "mean_abs_error": 0.891822850345855,
-    "median_abs_error": 0.453835664394532,
-    "max_abs_error": 6.079151067519533,
-    "mean_data_completeness": 0.7091592617908408
-  },
-  {
-    "region": "Western Pacific",
-    "rows": 154,
-    "countries": 22,
-    "mean_actual": 72.75405468837663,
-    "mean_predicted": 72.69384795349914,
-    "mean_residual": 0.0602067348774857,
-    "mean_abs_error": 0.5688188849346845,
-    "median_abs_error": 0.3361592017187504,
-    "max_abs_error": 3.460859840156246,
-    "mean_data_completeness": 0.6833561175666439
+    "mean_predicted": 74.53850520740856,
+    "mean_residual": 0.0648396182624372,
+    "mean_abs_error": 0.1207654642285154,
+    "median_abs_error": 0.06425066125,
+    "max_abs_error": 0.5902675034765679,
+    "mean_data_completeness": 0.8478188478188478
   },
   {
     "region": "South-East Asia",
     "rows": 70,
     "countries": 10,
     "mean_actual": 72.73824232185714,
-    "mean_predicted": 72.83622022356306,
-    "mean_residual": -0.0979779017059154,
-    "mean_abs_error": 0.5101617860892854,
-    "median_abs_error": 0.225161915478516,
-    "max_abs_error": 4.030450715937505,
-    "mean_data_completeness": 0.7345864661654135
+    "mean_predicted": 72.71240201677595,
+    "mean_residual": 0.0258403050811939,
+    "mean_abs_error": 0.1125595484416848,
+    "median_abs_error": 0.0706450074218736,
+    "max_abs_error": 0.9690381146289012,
+    "mean_data_completeness": 0.8730769230769232
+  },
+  {
+    "region": "Europe",
+    "rows": 350,
+    "countries": 50,
+    "mean_actual": 77.72902197111428,
+    "mean_predicted": 77.66512887137277,
+    "mean_residual": 0.0638930997415176,
+    "mean_abs_error": 0.1035359340074776,
+    "median_abs_error": 0.0508876950097629,
+    "max_abs_error": 0.7133669891406242,
+    "mean_data_completeness": 0.7449450549450549
+  },
+  {
+    "region": "Western Pacific",
+    "rows": 154,
+    "countries": 22,
+    "mean_actual": 72.75405468837663,
+    "mean_predicted": 72.72763078862971,
+    "mean_residual": 0.026423899746918,
+    "mean_abs_error": 0.0572802702696957,
+    "median_abs_error": 0.0393797218261724,
+    "max_abs_error": 0.2891379238281217,
+    "mean_data_completeness": 0.8134365634365635
   }
 ]

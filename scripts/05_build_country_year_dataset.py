@@ -41,15 +41,63 @@ DICTIONARY_PATH = INTERIM_DIR / "who_country_year_variable_dictionary.csv"
 
 COUNTRY_SPATIAL_TYPES = {"COUNTRY", "COUNTRY_AREA", "COUNTRY_GRP"}
 PREFERRED_DIM1_VALUES = {"BTSX", "SEX_BTSX", "Both sexes", "Both sexes combined", "Total", "ALL"}
+VARIABLE_NAME_MAX_LENGTH = 72
+DIMENSION_VALUE_COLUMNS = ["Dim1", "Dim2", "Dim3", "Dim4"]
 
 
-def slugify(value: str, max_length: int = 58) -> str:
+def slugify(value: str, max_length: int | None = None) -> str:
     text = value.lower()
     text = re.sub(r"[^a-z0-9]+", "_", text)
     text = re.sub(r"_+", "_", text).strip("_")
     if not text:
         return "indicator"
+    if max_length is None:
+        return text
     return text[:max_length].strip("_")
+
+
+def make_unique_variable_name(indicator_name: str, indicator_code: str, used_names: set[str]) -> str:
+    base_name = slugify(indicator_name)
+    candidate = slugify(base_name, max_length=VARIABLE_NAME_MAX_LENGTH)
+    if candidate not in used_names:
+        return candidate
+
+    suffix = slugify(indicator_code, max_length=24)
+    if not suffix:
+        suffix = "code"
+
+    trimmed_base = base_name[: max(1, VARIABLE_NAME_MAX_LENGTH - len(suffix) - 1)].strip("_")
+    candidate = f"{trimmed_base}_{suffix}".strip("_")
+
+    counter = 2
+    while candidate in used_names:
+        counter_suffix = f"_{counter}"
+        max_base_length = max(1, VARIABLE_NAME_MAX_LENGTH - len(suffix) - len(counter_suffix) - 1)
+        trimmed_base = base_name[:max_base_length].strip("_")
+        candidate = f"{trimmed_base}_{suffix}{counter_suffix}".strip("_")
+        counter += 1
+
+    return candidate
+
+
+def assign_variable_names(shortlist: pd.DataFrame) -> pd.DataFrame:
+    named = shortlist.copy()
+    used_names: set[str] = set()
+    variable_names: list[str] = []
+
+    for _, row in named.iterrows():
+        indicator_code = str(row["indicator_code"])
+        indicator_name = str(row["indicator_name"])
+        variable_name = (
+            "life_expectancy_at_birth"
+            if indicator_code == TARGET_INDICATOR
+            else make_unique_variable_name(indicator_name, indicator_code, used_names)
+        )
+        used_names.add(variable_name)
+        variable_names.append(variable_name)
+
+    named["variable_name"] = variable_names
+    return named
 
 
 def choose_single_dimension(frame: pd.DataFrame) -> pd.DataFrame:
@@ -67,6 +115,23 @@ def choose_single_dimension(frame: pd.DataFrame) -> pd.DataFrame:
     if preferred_mask.any():
         return frame.loc[preferred_mask].copy()
 
+    distinct_values = sorted({value for value in dim1_as_text.loc[frame["Dim1"].notna()].tolist() if value})
+    if len(distinct_values) <= 1:
+        return frame
+
+    raise ValueError(
+        "indicator has multiple Dim1 values and no preferred aggregate: "
+        + ", ".join(distinct_values[:5])
+    )
+
+
+def ensure_single_dimension_values(frame: pd.DataFrame) -> pd.DataFrame:
+    for column in DIMENSION_VALUE_COLUMNS[1:]:
+        if column not in frame.columns:
+            continue
+        values = sorted({str(value) for value in frame[column].dropna().tolist() if str(value).strip()})
+        if len(values) > 1:
+            raise ValueError(f"indicator has multiple {column} values and cannot be collapsed safely")
     return frame
 
 
@@ -85,6 +150,7 @@ def normalize_one_indicator(client: WHOGHOClient, indicator_code: str, variable_
             frame = frame.loc[country_like].copy()
 
     frame = choose_single_dimension(frame)
+    frame = ensure_single_dimension_values(frame)
     frame = frame.dropna(subset=["SpatialDim", "TimeDim", "NumericValue"]).copy()
     frame["TimeDim"] = pd.to_numeric(frame["TimeDim"], errors="coerce").astype("Int64")
     frame["NumericValue"] = pd.to_numeric(frame["NumericValue"], errors="coerce")
@@ -149,6 +215,7 @@ def main() -> None:
     )
     shortlist = pd.concat([target_row, shortlist], ignore_index=True)
     shortlist = shortlist.drop_duplicates(subset=["indicator_code"], keep="first").reset_index(drop=True)
+    shortlist = assign_variable_names(shortlist)
 
     client = WHOGHOClient()
     frames: list[pd.DataFrame] = []
@@ -160,7 +227,7 @@ def main() -> None:
         code = str(row["indicator_code"])
         name = str(row["indicator_name"])
         theme = str(row.get("theme", "unknown"))
-        variable_name = "life_expectancy_at_birth" if code == TARGET_INDICATOR else slugify(name)
+        variable_name = str(row["variable_name"])
 
         print(f"[{index + 1:02d}/{len(shortlist):02d}] {code} -> {variable_name}")
         try:

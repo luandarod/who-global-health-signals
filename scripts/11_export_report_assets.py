@@ -1,4 +1,4 @@
-"""Export compact assets for the final interactive report.
+﻿"""Export compact assets for the final interactive report.
 
 Run from the repository root:
 
@@ -12,7 +12,10 @@ Inputs:
     outputs/tables/residuals_by_country.csv
     outputs/tables/residuals_by_region.csv
     outputs/tables/residuals_by_year.csv
+    outputs/tables/model_error_by_model_year.csv
     outputs/tables/variable_missingness.csv
+    outputs/tables/local_model_surface_payload.json
+    outputs/tables/all_model_predictions.csv
 
 Outputs:
     data/public/report_summary.json
@@ -22,10 +25,11 @@ Outputs:
     data/public/country_residuals_top.json
     data/public/life_expectancy_trends.json
     data/public/data_completeness_by_region.json
+    data/public/yearly_completeness.json
     data/public/variable_coverage.json
-
-These JSON files are intentionally compact and frontend-friendly. They will feed
-an Astro/Svelte scrollytelling report in the next project phase.
+    data/public/model_error_by_year.json
+    data/public/model_response_surfaces.json
+    data/public/champion_predictions.json
 """
 
 from __future__ import annotations
@@ -38,37 +42,44 @@ from typing import Any
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-PUBLIC_DIR = PROJECT_ROOT / "data" / "public"
-TABLES_DIR = PROJECT_ROOT / "outputs" / "tables"
-PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
+PUBLIC_DIR = PROJECT_ROOT / 'data' / 'public'
+TABLES_DIR = PROJECT_ROOT / 'outputs' / 'tables'
+PROCESSED_DIR = PROJECT_ROOT / 'data' / 'processed'
 
 PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
 
-FULL_DATASET_PATH = PROCESSED_DIR / "who_country_year_dataset.csv"
-MODELING_DATASET_PATH = PROCESSED_DIR / "who_country_year_modeling_ready.csv"
-MODEL_COMPARISON_PATH = TABLES_DIR / "model_comparison_metrics.csv"
-EXECUTIVE_FINDINGS_PATH = TABLES_DIR / "executive_findings.csv"
-RESIDUALS_COUNTRY_PATH = TABLES_DIR / "residuals_by_country.csv"
-RESIDUALS_REGION_PATH = TABLES_DIR / "residuals_by_region.csv"
-RESIDUALS_YEAR_PATH = TABLES_DIR / "residuals_by_year.csv"
-VARIABLE_MISSINGNESS_PATH = TABLES_DIR / "variable_missingness.csv"
+FULL_DATASET_PATH = PROCESSED_DIR / 'who_country_year_dataset.csv'
+MODELING_DATASET_PATH = PROCESSED_DIR / 'who_country_year_modeling_ready.csv'
+MODEL_COMPARISON_PATH = TABLES_DIR / 'model_comparison_metrics.csv'
+EXECUTIVE_FINDINGS_PATH = TABLES_DIR / 'executive_findings.csv'
+RESIDUALS_COUNTRY_PATH = TABLES_DIR / 'residuals_by_country.csv'
+RESIDUALS_REGION_PATH = TABLES_DIR / 'residuals_by_region.csv'
+RESIDUALS_YEAR_PATH = TABLES_DIR / 'residuals_by_year.csv'
+MODEL_YEAR_ERROR_PATH = TABLES_DIR / 'model_error_by_model_year.csv'
+VARIABLE_MISSINGNESS_PATH = TABLES_DIR / 'variable_missingness.csv'
+SURFACE_PAYLOAD_PATH = TABLES_DIR / 'local_model_surface_payload.json'
+ALL_PREDICTIONS_PATH = TABLES_DIR / 'all_model_predictions.csv'
 
-TARGET = "life_expectancy_at_birth"
+TARGET = 'life_expectancy_at_birth'
 TOP_COUNTRIES = 30
 
 
 def read_csv(path: Path) -> pd.DataFrame:
     if not path.exists():
-        raise SystemExit(f"Required file not found: {path.relative_to(PROJECT_ROOT)}")
+        raise SystemExit(f'Required file not found: {path.relative_to(PROJECT_ROOT)}')
     return pd.read_csv(path)
 
 
-def sanitize_json_value(value: Any) -> Any:
-    """Convert missing values into valid JSON nulls.
 
-    The order matters: lists and dicts must be handled before pd.isna(),
-    because pd.isna(list_like) returns an array and cannot be used as a boolean.
-    """
+def read_optional_json(path: Path) -> Any:
+    if not path.exists():
+        return []
+    with path.open('r', encoding='utf-8') as file:
+        return json.load(file)
+
+
+
+def sanitize_json_value(value: Any) -> Any:
     if value is None:
         return None
     if isinstance(value, dict):
@@ -87,89 +98,144 @@ def sanitize_json_value(value: Any) -> Any:
     return value
 
 
+
 def clean_records(frame: pd.DataFrame) -> list[dict[str, Any]]:
-    records = frame.to_dict(orient="records")
-    return sanitize_json_value(records)
+    return sanitize_json_value(frame.to_dict(orient='records'))
+
 
 
 def write_json(name: str, payload: Any) -> None:
     path = PUBLIC_DIR / name
     clean_payload = sanitize_json_value(payload)
-    with path.open("w", encoding="utf-8") as file:
+    with path.open('w', encoding='utf-8') as file:
         json.dump(clean_payload, file, ensure_ascii=False, indent=2, allow_nan=False)
-    print(f"Saved: {path.relative_to(PROJECT_ROOT)}")
+    print(f'Saved: {path.relative_to(PROJECT_ROOT)}')
+
+
+def align_executive_findings(executive: pd.DataFrame, comparison: pd.DataFrame) -> pd.DataFrame:
+    if executive.empty or comparison.empty:
+        return executive
+
+    aligned = executive.copy()
+    best_model = comparison.sort_values('test_mae', ascending=True).iloc[0]
+    champion_mask = aligned['finding_id'] == 'champion_model'
+    overall_mask = aligned['finding_id'] == 'overall_error'
+
+    if champion_mask.any():
+        aligned.loc[champion_mask, 'metric'] = str(best_model['model'])
+        aligned.loc[champion_mask, 'value'] = float(best_model['test_mae'])
+
+    if overall_mask.any():
+        aligned.loc[overall_mask, 'value'] = float(best_model['test_mae'])
+
+    return aligned
+
 
 
 def build_report_summary(full: pd.DataFrame, modeling: pd.DataFrame, executive: pd.DataFrame, comparison: pd.DataFrame) -> dict[str, Any]:
-    best_model = comparison.sort_values("test_mae", ascending=True).iloc[0]
-    summary = {
-        "project_title": "Global Health Signals",
-        "project_subtitle": "Predicting life expectancy from WHO health-system indicators using TabPFN",
-        "analytical_question": "Can public health indicators from WHO explain and predict differences in life expectancy across countries?",
-        "dataset": {
-            "full_rows": int(len(full)),
-            "full_columns": int(len(full.columns)),
-            "countries": int(full["country_code"].nunique(dropna=True)),
-            "min_year": int(full["year"].min()),
-            "max_year": int(full["year"].max()),
-            "modeling_rows": int(len(modeling)),
-            "modeling_columns": int(len(modeling.columns)),
+    best_model = comparison.sort_values('test_mae', ascending=True).iloc[0]
+    aligned_executive = align_executive_findings(executive, comparison)
+    return {
+        'project_title': 'Global Health Signals',
+        'project_subtitle': 'Predicting life expectancy from WHO health-system indicators using local heavy benchmarks and an optional TabPFN reference',
+        'analytical_question': 'Can public health indicators from WHO explain observable variation and predict differences in life expectancy across countries?',
+        'dataset': {
+            'full_rows': int(len(full)),
+            'full_columns': int(len(full.columns)),
+            'countries': int(full['country_code'].nunique(dropna=True)),
+            'min_year': int(full['year'].min()),
+            'max_year': int(full['year'].max()),
+            'modeling_rows': int(len(modeling)),
+            'modeling_columns': int(len(modeling.columns)),
         },
-        "best_model": {
-            "name": str(best_model["model"]),
-            "test_mae": float(best_model["test_mae"]),
-            "test_rmse": float(best_model["test_rmse"]),
-            "test_r2": float(best_model["test_r2"]),
+        'best_model': {
+            'name': str(best_model['model']),
+            'test_mae': float(best_model['test_mae']),
+            'test_rmse': float(best_model['test_rmse']),
+            'test_r2': float(best_model['test_r2']),
         },
-        "executive_findings": clean_records(executive),
-        "chapters": [
+        'executive_findings': clean_records(aligned_executive),
+        'chapters': [
             {
-                "id": "data_foundation",
-                "title": "The data foundation",
-                "description": "WHO indicators are broad, historical and unevenly complete across countries and years.",
+                'id': 'data_foundation',
+                'title': 'The data foundation',
+                'description': 'WHO indicators are broad, historical and unevenly complete across countries and years.',
             },
             {
-                "id": "health_signals",
-                "title": "The health-system signals",
-                "description": "Mortality, immunization and expenditure signals structure the predictive layer.",
+                'id': 'health_signals',
+                'title': 'The health-system signals',
+                'description': 'Mortality, immunization, expenditure and data-quality signals structure the predictive layer.',
             },
             {
-                "id": "prediction_layer",
-                "title": "The prediction layer",
-                "description": "TabPFN predicted recent life expectancy with lower error than linear and tree baselines.",
+                'id': 'prediction_layer',
+                'title': 'The prediction layer',
+                'description': 'A heavy local benchmark identifies the strongest predictive model, while TabPFN remains an optional external reference.',
             },
             {
-                "id": "residual_intelligence",
-                "title": "Residual intelligence",
-                "description": "Outliers reveal countries performing better or worse than expected given the available signals.",
+                'id': 'residual_intelligence',
+                'title': 'Residual intelligence',
+                'description': 'Outliers reveal countries performing better or worse than expected given the available signals.',
             },
         ],
     }
-    return summary
+
 
 
 def build_life_expectancy_trends(modeling: pd.DataFrame) -> pd.DataFrame:
     if TARGET not in modeling.columns:
         return pd.DataFrame()
     return (
-        modeling.groupby(["year", "region"], dropna=False)
-        .agg(life_expectancy=(TARGET, "mean"), countries=("country_code", "nunique"))
+        modeling.groupby(['year', 'region'], dropna=False)
+        .agg(life_expectancy=(TARGET, 'mean'), countries=('country_code', 'nunique'))
         .reset_index()
-        .sort_values(["year", "region"])
+        .sort_values(['year', 'region'])
     )
+
 
 
 def build_completeness_by_region(full: pd.DataFrame) -> pd.DataFrame:
     return (
-        full.loc[full["year"] >= 2000]
-        .groupby("region", dropna=False)
+        full.loc[full['year'] >= 2000]
+        .groupby('region', dropna=False)
+        .agg(mean_completeness=('data_completeness_score', 'mean'), countries=('country_code', 'nunique'), rows=('country_code', 'size'))
+        .reset_index()
+        .sort_values('mean_completeness', ascending=False)
+    )
+
+
+
+def build_champion_predictions(predictions: pd.DataFrame, comparison: pd.DataFrame) -> pd.DataFrame:
+    if predictions.empty or comparison.empty:
+        return pd.DataFrame()
+
+    champion_name = str(comparison.sort_values('test_mae', ascending=True).iloc[0]['model'])
+    columns = ['country_code', 'year', 'region', 'actual', 'predicted', 'residual', 'abs_error']
+    available_columns = [column for column in columns if column in predictions.columns]
+    champion = (
+        predictions.loc[predictions['model'] == champion_name, available_columns]
+        .copy()
+        .sort_values(['year', 'country_code'])
+        .reset_index(drop=True)
+    )
+    champion['model'] = champion_name
+    return champion
+
+
+def build_yearly_completeness(full: pd.DataFrame) -> pd.DataFrame:
+    if 'data_completeness_score' not in full.columns:
+        return pd.DataFrame()
+
+    return (
+        full.loc[full['year'] >= 2000]
+        .groupby('year', dropna=False)
         .agg(
-            mean_completeness=("data_completeness_score", "mean"),
-            countries=("country_code", "nunique"),
-            rows=("country_code", "size"),
+            mean_completeness=('data_completeness_score', 'mean'),
+            median_completeness=('data_completeness_score', 'median'),
+            countries=('country_code', 'nunique'),
+            rows=('country_code', 'size'),
         )
         .reset_index()
-        .sort_values("mean_completeness", ascending=False)
+        .sort_values('year')
     )
 
 
@@ -181,26 +247,35 @@ def main() -> None:
     residuals_country = read_csv(RESIDUALS_COUNTRY_PATH)
     residuals_region = read_csv(RESIDUALS_REGION_PATH)
     residuals_year = read_csv(RESIDUALS_YEAR_PATH)
+    model_year_error = read_csv(MODEL_YEAR_ERROR_PATH)
     missingness = read_csv(VARIABLE_MISSINGNESS_PATH)
+    all_predictions = read_csv(ALL_PREDICTIONS_PATH)
+    surfaces = read_optional_json(SURFACE_PAYLOAD_PATH)
 
     report_summary = build_report_summary(full, modeling, executive, comparison)
     life_trends = build_life_expectancy_trends(modeling)
     completeness_region = build_completeness_by_region(full)
-    country_top = residuals_country.sort_values("mean_abs_error", ascending=False).head(TOP_COUNTRIES)
-    coverage_top = missingness.sort_values("non_null_share", ascending=False).head(20)
+    champion_predictions = build_champion_predictions(all_predictions, comparison)
+    yearly_completeness = build_yearly_completeness(full)
+    country_top = residuals_country.sort_values('mean_abs_error', ascending=False).head(TOP_COUNTRIES)
+    coverage_top = missingness.sort_values('non_null_share', ascending=False).head(20)
 
-    write_json("report_summary.json", report_summary)
-    write_json("model_comparison.json", clean_records(comparison))
-    write_json("region_residuals.json", clean_records(residuals_region))
-    write_json("year_residuals.json", clean_records(residuals_year))
-    write_json("country_residuals_top.json", clean_records(country_top))
-    write_json("life_expectancy_trends.json", clean_records(life_trends))
-    write_json("data_completeness_by_region.json", clean_records(completeness_region))
-    write_json("variable_coverage.json", clean_records(coverage_top))
+    write_json('report_summary.json', report_summary)
+    write_json('model_comparison.json', clean_records(comparison))
+    write_json('region_residuals.json', clean_records(residuals_region))
+    write_json('year_residuals.json', clean_records(residuals_year))
+    write_json('country_residuals_top.json', clean_records(country_top))
+    write_json('life_expectancy_trends.json', clean_records(life_trends))
+    write_json('data_completeness_by_region.json', clean_records(completeness_region))
+    write_json('yearly_completeness.json', clean_records(yearly_completeness))
+    write_json('variable_coverage.json', clean_records(coverage_top))
+    write_json('model_error_by_year.json', clean_records(model_year_error))
+    write_json('model_response_surfaces.json', surfaces)
+    write_json('champion_predictions.json', clean_records(champion_predictions))
 
-    print("\nReport asset export completed.")
-    print("Next step: build the interactive report shell and consume these JSON files.")
+    print('\nReport asset export completed.')
+    print('Next step: rebuild the interactive report shell and consume the expanded JSON files.')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

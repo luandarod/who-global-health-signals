@@ -4,76 +4,76 @@
     "rows": 184,
     "countries": 184,
     "mean_actual": 71.64122841494566,
-    "mean_predicted": 71.68487368459287,
-    "mean_residual": -0.0436452696472168,
-    "mean_abs_error": 0.2874246143065875,
-    "median_abs_error": 0.1686668948535157,
-    "max_abs_error": 1.91031507523438
+    "mean_predicted": 71.64259008739306,
+    "mean_residual": -0.0013616724474036,
+    "mean_abs_error": 0.035355076621465,
+    "median_abs_error": 0.0272317810058595,
+    "max_abs_error": 0.1870703398828155
   },
   {
     "year": 2016,
     "rows": 184,
     "countries": 184,
     "mean_actual": 71.9056481296739,
-    "mean_predicted": 71.95906178847603,
-    "mean_residual": -0.053413658802119,
-    "mean_abs_error": 0.5006809823114807,
-    "median_abs_error": 0.2740308531005873,
-    "max_abs_error": 8.403009886240234
+    "mean_predicted": 71.90685280509616,
+    "mean_residual": -0.0012046754222574,
+    "mean_abs_error": 0.0464184661248514,
+    "median_abs_error": 0.0350349294335998,
+    "max_abs_error": 0.2519438980078092
   },
   {
     "year": 2017,
     "rows": 184,
     "countries": 184,
     "mean_actual": 72.13937066755435,
-    "mean_predicted": 72.13237360249396,
-    "mean_residual": 0.0069970650603975,
-    "mean_abs_error": 0.6848149774534007,
-    "median_abs_error": 0.3874284661035148,
-    "max_abs_error": 9.583974634140624
+    "mean_predicted": 72.13864927706511,
+    "mean_residual": 0.0007213904892358,
+    "mean_abs_error": 0.0587632240843664,
+    "median_abs_error": 0.0437245286425777,
+    "max_abs_error": 0.4265120994531273
   },
   {
     "year": 2018,
     "rows": 184,
     "countries": 184,
     "mean_actual": 72.37530872543479,
-    "mean_predicted": 72.34101511084515,
-    "mean_residual": 0.0342936145896315,
-    "mean_abs_error": 0.8503016929787278,
-    "median_abs_error": 0.5776794525781277,
-    "max_abs_error": 10.381785657382814
+    "mean_predicted": 72.37494114170904,
+    "mean_residual": 0.0003675837257452,
+    "mean_abs_error": 0.0769699016449233,
+    "median_abs_error": 0.0527410464648454,
+    "max_abs_error": 0.466071755244144
   },
   {
     "year": 2019,
     "rows": 184,
     "countries": 184,
     "mean_actual": 72.57688894625,
-    "mean_predicted": 72.51549799545951,
-    "mean_residual": 0.0613909507904848,
-    "mean_abs_error": 0.9820373254600454,
-    "median_abs_error": 0.679240667666015,
-    "max_abs_error": 10.154225925390628
+    "mean_predicted": 72.57263890556668,
+    "mean_residual": 0.0042500406833283,
+    "mean_abs_error": 0.0881285303382409,
+    "median_abs_error": 0.0578289553613302,
+    "max_abs_error": 0.5999334512792984
   },
   {
     "year": 2020,
     "rows": 184,
     "countries": 184,
     "mean_actual": 72.01021307804348,
-    "mean_predicted": 72.4931903300078,
-    "mean_residual": -0.4829772519643235,
-    "mean_abs_error": 1.446676381899255,
-    "median_abs_error": 1.0838987622753926,
-    "max_abs_error": 10.172562245468749
+    "mean_predicted": 71.85460399544758,
+    "mean_residual": 0.1556090825959049,
+    "mean_abs_error": 0.1872739756283437,
+    "median_abs_error": 0.1658329452539035,
+    "max_abs_error": 0.8719787027929726
   },
   {
     "year": 2021,
     "rows": 184,
     "countries": 184,
     "mean_actual": 71.23893805097826,
-    "mean_predicted": 72.3406773650128,
-    "mean_residual": -1.1017393140345295,
-    "mean_abs_error": 1.812102739492346,
-    "median_abs_error": 1.3556058528515609,
-    "max_abs_error": 10.519100899882815
+    "mean_predicted": 70.98758054816204,
+    "mean_residual": 0.2513575028162153,
+    "mean_abs_error": 0.278364316124958,
+    "median_abs_error": 0.2723429330517568,
+    "max_abs_error": 0.9690381146289012
   }
 ]

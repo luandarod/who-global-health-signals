@@ -29,6 +29,7 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "who_country_year_dataset.csv"
 MODELING_PATH = PROJECT_ROOT / "data" / "processed" / "who_country_year_modeling_ready.csv"
+DICTIONARY_PATH = PROJECT_ROOT / "data" / "interim" / "who_country_year_variable_dictionary.csv"
 MISSINGNESS_PATH = PROJECT_ROOT / "outputs" / "tables" / "variable_missingness.csv"
 YEAR_COVERAGE_PATH = PROJECT_ROOT / "outputs" / "tables" / "year_coverage.csv"
 FIGURES_DIR = PROJECT_ROOT / "outputs" / "figures"
@@ -38,6 +39,15 @@ FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 TABLES_DIR.mkdir(parents=True, exist_ok=True)
 
 TARGET = "life_expectancy_at_birth"
+SCATTER_INDICATOR_CODES = [
+    ("under5_mortality", "MDG_0000000007"),
+    ("infant_mortality", "MDG_0000000001"),
+    ("neonatal_mortality", "WHOSIS_000003"),
+    ("maternal_mortality", "MDG_0000000026"),
+    ("immunization", "WHS4_100"),
+    ("health_expenditure", "GHED_CHEGDP_SHA2011"),
+    ("tuberculosis", "MDG_0000000017"),
+]
 
 
 def savefig(name: str) -> None:
@@ -48,13 +58,19 @@ def savefig(name: str) -> None:
     print(f"Saved: {path.relative_to(PROJECT_ROOT)}")
 
 
-def find_column(columns: list[str], required_terms: list[str], forbidden_terms: list[str] | None = None) -> str | None:
-    forbidden_terms = forbidden_terms or []
-    for column in columns:
-        normalized = column.lower()
-        if all(term in normalized for term in required_terms) and not any(term in normalized for term in forbidden_terms):
-            return column
-    return None
+def resolve_scatter_candidates(modeling_columns: list[str], dictionary: pd.DataFrame) -> list[tuple[str, str]]:
+    available_columns = set(modeling_columns)
+    resolved: list[tuple[str, str]] = []
+
+    for label, indicator_code in SCATTER_INDICATOR_CODES:
+        matches = dictionary.loc[dictionary["indicator_code"] == indicator_code, "variable_name"]
+        if matches.empty:
+            continue
+        variable_name = str(matches.iloc[0])
+        if variable_name in available_columns:
+            resolved.append((label, variable_name))
+
+    return resolved
 
 
 def plot_variable_missingness(missingness: pd.DataFrame) -> None:
@@ -122,22 +138,12 @@ def plot_life_expectancy_trend(modeling: pd.DataFrame) -> None:
     savefig("04_life_expectancy_trend_by_region.png")
 
 
-def plot_scatter_relationships(modeling: pd.DataFrame) -> list[dict[str, object]]:
+def plot_scatter_relationships(modeling: pd.DataFrame, dictionary: pd.DataFrame) -> list[dict[str, object]]:
     findings: list[dict[str, object]] = []
-    columns = modeling.columns.tolist()
-
-    candidates = [
-        ("under5_mortality", find_column(columns, ["under", "mortality"])),
-        ("infant_mortality", find_column(columns, ["infant", "mortality"])),
-        ("neonatal_mortality", find_column(columns, ["neonatal", "mortality"])),
-        ("maternal_mortality", find_column(columns, ["maternal", "mortality"])),
-        ("immunization", find_column(columns, ["immunization"])),
-        ("health_expenditure", find_column(columns, ["health", "expenditure"])),
-        ("tuberculosis", find_column(columns, ["tuberculosis"])),
-    ]
+    candidates = resolve_scatter_candidates(modeling.columns.tolist(), dictionary)
 
     for label, column in candidates:
-        if column is None or TARGET not in modeling.columns:
+        if TARGET not in modeling.columns:
             continue
         frame = modeling[[column, TARGET, "region"]].dropna().copy()
         if len(frame) < 50:
@@ -203,6 +209,7 @@ def main() -> None:
 
     dataset = pd.read_csv(DATASET_PATH)
     modeling = pd.read_csv(MODELING_PATH)
+    dictionary = pd.read_csv(DICTIONARY_PATH)
     missingness = pd.read_csv(MISSINGNESS_PATH)
     year_coverage = pd.read_csv(YEAR_COVERAGE_PATH)
 
@@ -210,7 +217,7 @@ def main() -> None:
     plot_year_coverage(year_coverage)
     plot_region_completeness(dataset)
     plot_life_expectancy_trend(modeling)
-    scatter_findings = plot_scatter_relationships(modeling)
+    scatter_findings = plot_scatter_relationships(modeling, dictionary)
     export_key_findings(dataset, modeling, missingness, scatter_findings)
 
     print("\nEDA figure generation completed.")

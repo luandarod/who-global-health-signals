@@ -1,5 +1,6 @@
 export function valueExtent(data, accessor) {
   const values = data.map(accessor).map(Number).filter(Number.isFinite);
+  if (!values.length) return [0, 1];
   return [Math.min(...values), Math.max(...values)];
 }
 

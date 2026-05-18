@@ -9,7 +9,7 @@
   export let valueKey = 'value';
   export let mode = 'number';
   export let detailTitle = 'Selected signal';
-  export let detailBuilder = null;
+  export let detailKind = 'generic';
   export let limit = 10;
 
   let selectedIndex = 0;
@@ -25,7 +25,19 @@
 
   function detailText(row) {
     if (!row) return '';
-    if (detailBuilder) return detailBuilder(row);
+
+    if (detailKind === 'coverage') {
+      return `Coverage in the country-year table: ${formatPercent(row.non_null_share)}. Missing share: ${formatPercent(row.missing_share)}.`;
+    }
+
+    if (detailKind === 'completeness') {
+      return `Average data completeness across ${formatNumber(row.countries, 0)} countries and ${formatNumber(row.rows, 0)} country-year rows.`;
+    }
+
+    if (detailKind === 'residual') {
+      return `Mean absolute prediction error: ${formatNumber(row.mean_abs_error, 2)} years. Rows: ${formatNumber(row.rows, 0)}. Countries: ${formatNumber(row.countries, 0)}.`;
+    }
+
     return `${labelName(row[labelKey])}: ${formatValue(row[valueKey])}.`;
   }
 
